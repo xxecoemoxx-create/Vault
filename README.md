@@ -502,3 +502,6 @@ export default {
     });
   },
 };
+pip install torch torchvision torchaudio
+pip install diffusers transformers accelerate
+pip install git+https://github.com/facebookresearch/audiocraft.git
