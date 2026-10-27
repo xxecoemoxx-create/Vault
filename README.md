@@ -2786,5 +2786,6 @@ Grieve the earth. Save it anyway.
 
 </body>
 </html>
+npm create cloudflare@latest master-router
 
 
