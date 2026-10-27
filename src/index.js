@@ -420,3 +420,51 @@ export default {
     });
   },
 };
+export default {
+  async fetch(request, env, ctx) {
+    const url = new URL(request.url);
+
+    // Progressive Web App Manifest (Downloadable App)
+    if (url.pathname === '/manifest.json') {
+      return new Response(JSON.stringify({
+        "name": "Eco Emo",
+        "short_name": "Eco Emo",
+        "start_url": "/",
+        "display": "standalone",
+        "background_color": "#000000",
+        "theme_color": "#4A9B7A",
+        "icons": [{ "src": "/assets/moth-favicon.png", "sizes": "512x512", "type": "image/png" }]
+      }), { headers: { 'Content-Type': 'application/json' } });
+    }
+
+    // Payment Webhooks (Stripe, PayPal, Crypto)
+    if (url.pathname === '/webhooks/payments') {
+      const payload = await request.json();
+      // Payout Split Logic: Calculate conservation donation vs overhead
+      const totalAmount = payload.amount;
+      const donationCut = totalAmount * 0.15; // 15% to real-world conservation orgs
+      const payoutCut = totalAmount - donationCut;
+      
+      await env.BIGQUERY_LOGGER.fetch('https://your-bigquery-endpoint', {
+        method: 'POST',
+        body: JSON.stringify({ type: 'transaction', split: { donationCut, payoutCut }, data: payload })
+      });
+      return new Response('Payment processed and split recorded', { status: 200 });
+    }
+
+    // Merch Design Approval Gateway (Strict Confirmation Mode)
+    if (url.pathname === '/automate/merch-design') {
+      const designPayload = await request.json();
+      // Agent generates design, but ONLY saves as draft in Printify API
+      const printifyDraft = await fetch('https://api.printify.com/v1/shops/SHOP_ID/products.json', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${env.PRINTIFY_TOKEN}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...designPayload, visible: false }) // visible: false ensures it requires manual publish
+      });
+      return new Response('Design generated and pending manual confirmation', { status: 200 });
+    }
+
+    // Spotify playlist removed from frontend configuration internally
+    return new Response('Agency Den Active. Spotify module stripped.', { status: 200 });
+  }
+};
