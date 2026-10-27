@@ -1,4 +1,4 @@
-import torch
+5px import torch
 import scipy.io.wavfile as wavfile
 from audiocraft.models import MusicGen
 from diffusers import StableDiffusionPipeline
@@ -48,3 +48,30 @@ for track_name, prompts in tracks.items():
     image.save(f"{track_name}_cover.png")
 
 print("\nSolastalgia production complete. Files saved to current directory.")
+import subprocess
+import sys
+import json
+
+def render_music_video(track_name, raw_vocal_path, instrumental_path, output_path):
+    # Step 1: Mix vocals with instrumental and apply the Web Audio DSP scream effect equivalent
+    mixed_audio = "temp_mixed.wav"
+    subprocess.run([
+        "ffmpeg", "-i", raw_vocal_path, "-i", instrumental_path, 
+        "-filter_complex", "[0:a]volume=1.2,compand[v];[1:a]volume=0.8[i];[v][i]amix=inputs=2:duration=longest",
+        mixed_audio, "-y"
+    ], check=True)
+
+    # Step 2: Generate the visualizer video using the brand palette and album art
+    subprocess.run([
+        "ffmpeg", "-loop", "1", "-i", "assets/solastalgia_cover.png", 
+        "-i", mixed_audio, 
+        "-vf", "drawbox=x=0:y=0:w=iw:h=ih:color=#4A9B7A:t=fill,format=yuv420p", 
+        "-c:v", "libx264", "-tune", "stillimage", "-c:a", "aac", "-b:a", "192k", 
+        "-pix_fmt", "yuv420p", "-shortest", output_path, "-y"
+    ], check=True)
+    print(f"[{track_name}] Rendered and sealed in the vault: {output_path}")
+
+if __name__ == "__main__":
+    payload = json.loads(sys.argv[1])
+    render_music_video(payload['track'], payload['vocal'], payload['instrumental'], payload['output'])
+
