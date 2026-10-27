@@ -74,4 +74,6 @@ def render_music_video(track_name, raw_vocal_path, instrumental_path, output_pat
 if __name__ == "__main__":
     payload = json.loads(sys.argv[1])
     render_music_video(payload['track'], payload['vocal'], payload['instrumental'], payload['output'])
-
+Execution Pipeline
+To link this all together without repeating manual steps, update your custom vault.js CLI in the Codespace terminal. Add a new command vault orchestrate that automatically pushes your local changes to the Cloudflare Worker and starts the Python rendering queue for any pending audio files.
+​Run npx wrangler deploy in your master-router directory to push the central API live. Send the deployment URL here, and we can immediately route your Base44 links (superagent-9d2adfc6.base44.app) to start pointing their outputs into this single entity.
