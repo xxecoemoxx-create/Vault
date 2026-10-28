@@ -2787,5 +2787,11 @@ Grieve the earth. Save it anyway.
 </body>
 </html>
 npm create cloudflare@latest master-router
+npx wrangler login
+npx wrangler deploy
+git remote -v
+npx wrangler whoami
+
+
 
 
