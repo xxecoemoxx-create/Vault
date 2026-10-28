@@ -2792,6 +2792,8 @@ npx wrangler deploy
 git remote -v
 npx wrangler whoami
 node vault.js sync
+npx wrangler deploy --project-name ecoemo-vault
+
 
 
 
