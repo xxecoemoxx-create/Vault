@@ -1,3 +1,4 @@
+node vault.js sync
 IPexport default {
   async fetch(request, env) {
     const html = `
