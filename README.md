@@ -1,4 +1,3 @@
-node vault.js sync
 IPexport default {
   async fetch(request, env) {
     const html = `
@@ -2792,6 +2791,8 @@ npx wrangler login
 npx wrangler deploy
 git remote -v
 npx wrangler whoami
+node vault.js sync
+
 
 
 
