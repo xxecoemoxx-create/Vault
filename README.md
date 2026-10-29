@@ -1,4 +1,7 @@
-IPexport default {
+cd existing_repogit remote rename origin old-origin
+git remote add origin git@gitlab.com:ecoemo-group/ecoemo-agency-den.git
+git push --set-upstream origin --all
+git push --set-upstream origin --tagsIPexport default {
   async fetch(request, env) {
     const html = `
     <!DOCTYPE html>
