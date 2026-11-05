@@ -2797,7 +2797,7 @@ npx wrangler whoami
 node vault.js sync
 npx wrangler deploy --project-name ecoemo-vault
 
-
+mkdir p agency den degradation extinction reclamation
 
 
 
