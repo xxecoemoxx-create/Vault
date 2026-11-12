@@ -2804,6 +2804,9 @@ git status
 git add .
 git commit -m "Deploy complete Eco Emo 3-tier ecosystem, albums, games, sustainable merch, and WORX portal"
 git push origin main
+git add .
+git commit -m "Fix homepage layout, remove Spotify embeds, add games, merch, and WORX portal"
+git push origin main
 
 
 
