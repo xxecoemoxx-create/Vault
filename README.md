@@ -1,3 +1,10 @@
+git remote set-url gitlab git@gitlab.com:ecoemo-group/ecoemo-agency-den.git
+git remote -v
+git remote set-url origin https://github.com/xxecoemoxx-create/Vault.git
+git remote add gitlab git@gitlab.com:ecoemo-group/ecoemo-agency-den.git
+git remote -v
+git push origin main
+git push gitlab main
 # Install Cloudflare CLI (beta) globally
 npm install -g cf
 
