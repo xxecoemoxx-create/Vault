@@ -2799,6 +2799,11 @@ npx wrangler deploy --project-name ecoemo-vault
 
 mkdir p agency den degradation extinction reclamation
 
+cd Vault
+git status
+git add .
+git commit -m "Deploy complete Eco Emo 3-tier ecosystem, albums, games, sustainable merch, and WORX portal"
+git push origin main
 
 
 
