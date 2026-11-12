@@ -1,3 +1,13 @@
+# Install Cloudflare CLI (beta) globally
+npm install -g cf
+
+# Authenticate with your Cloudflare account
+cf auth login
+npx wrangler login
+# If using Claude Code / compatible agent runner:
+/plugin marketplace add cloudflare/skills
+/plugin install cloudflare@cloudflare
+npx wrangler deploy
 # 1. Clean any local cache or stale build artifacts
 rm -rf .wrangler dist build
 
