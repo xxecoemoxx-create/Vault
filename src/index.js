@@ -673,3 +673,34 @@ export default {
 
 </body>
 </html>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Special+Elite&display=swap');
+
+    :root { --bg: #000000; --cream: #C8C0A8; --border: #C8C0A8; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--cream); font-family: 'Special Elite', monospace; line-height: 1.6; padding: 1.5rem; }
+    
+    header { text-align: center; border: 2px solid var(--cream); padding: 2.5rem 1rem; margin-bottom: 2rem; background: #030303; position: relative; box-shadow: 0 0 20px rgba(200, 192, 168, 0.05); }
+    
+    .ar-tree-banner { height: 140px; background: radial-gradient(circle, #121212 0%, #000000 100%); border: 1px solid var(--cream); display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; position: relative; overflow: hidden; }
+    .ar-tree-banner::after { content: "🌿 [AR BLEEDING TREE ACTIVE // AGENCY DEN]"; font-size: 0.85rem; letter-spacing: 4px; color: var(--cream); opacity: 0.85; text-transform: uppercase; font-family: monospace; }
+    
+    h1 { font-family: 'Cinzel', serif; font-size: 2.8rem; letter-spacing: 6px; font-weight: 900; color: var(--cream); margin-bottom: 0.5rem; text-shadow: 2px 2px 0px #1a1a1a; }
+    .tagline { font-style: italic; opacity: 0.85; letter-spacing: 1.5px; font-size: 1.05rem; }
+
+    nav { display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
+    nav a { color: var(--bg); background: var(--cream); padding: 0.6rem 1.2rem; text-decoration: none; font-weight: bold; border: 1px solid var(--cream); font-family: monospace; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s ease; }
+    nav a:hover { background: var(--bg); color: var(--cream); box-shadow: 0 0 10px rgba(200, 192, 168, 0.3); }
+
+    section { border: 1px solid var(--cream); padding: 1.5rem; margin-bottom: 2rem; background: #050505; }
+    h2 { border-bottom: 1px solid var(--cream); padding-bottom: 0.5rem; margin-bottom: 1rem; font-size: 1.4rem; font-family: 'Cinzel', serif; letter-spacing: 2px; }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
+    .card { border: 1px solid var(--cream); padding: 1.2rem; background: #0a0a0a; display: flex; flex-direction: column; justify-content: space-between; }
+    .card h3 { margin-bottom: 0.5rem; font-size: 1.1rem; font-family: 'Cinzel', serif; letter-spacing: 1px; }
+    
+    .btn { display: block; text-align: center; margin-top: 1rem; padding: 0.6rem; border: 1px solid var(--cream); color: var(--cream); text-decoration: none; background: #000; cursor: pointer; font-family: monospace; text-transform: uppercase; letter-spacing: 1px; }
+    .btn:hover { background: var(--cream); color: #000; }
+
+    footer { text-align: center; margin-top: 3rem; font-size: 0.8rem; opacity: 0.7; border-top: 1px solid var(--cream); padding-top: 1.5rem; letter-spacing: 1px; }
+</style>
