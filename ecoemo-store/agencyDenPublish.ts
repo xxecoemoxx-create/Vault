@@ -1,10 +1,11 @@
 // agencyDenPublish — flips Agency Den tier products to live in the shop.
-// Called after Printify products exist, so nothing goes on sale that cannot be fulfilled.
+// Called only after a real fulfilment path exists (Printify product, or a digital SKU),
+// so nothing goes on sale that cannot be shipped.
 // Auth: ?key=ecoemo_vault_2026
 //
-// Body: { items: [{ id, printify_product_id?, image_url?, name? }] }
-// Behaviour per item: drop the "awaiting_approval" tag, add "published",
-// set is_active = true, and write printify_product_id / image_url when supplied.
+// Body: { items: [{ id, printify_product_id?, image_url?, name?, price?, category? }] }
+// Per item: drop the "awaiting_approval" tag, add "published", set is_active = true,
+// and write any supplied printify_product_id / image_url / name / price / category.
 
 import { createClientFromRequest } from "npm:@base44/sdk";
 
@@ -54,12 +55,15 @@ Deno.serve(async (req) => {
       if (it.printify_product_id) patch.printify_product_id = it.printify_product_id;
       if (it.image_url) patch.image_url = it.image_url;
       if (it.name) patch.name = it.name;
+      if (typeof it.price === "number") patch.price = it.price;
+      if (it.category) patch.category = it.category;
 
       await base44.asServiceRole.entities.MerchProduct.update(it.id, patch);
       results.push({
         id: it.id,
         ok: true,
-        name: rec.name,
+        name: it.name || rec.name,
+        price: typeof it.price === "number" ? it.price : rec.price,
         printify_product_id: patch.printify_product_id || rec.printify_product_id || null,
       });
     } catch (e) {
