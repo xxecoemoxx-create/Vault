@@ -468,3 +468,208 @@ export default {
     return new Response('Agency Den Active. Spotify module stripped.', { status: 200 });
   }
 };
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco Emo | Agency Den & Endling Studio</title>
+    <style>
+        :root { --bg: #000000; --cream: #C8C0A8; --border: #C8C0A8; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: var(--bg); color: var(--cream); font-family: 'Courier New', Courier, monospace; line-height: 1.6; padding: 1.5rem; }
+        
+        header { text-align: center; border-bottom: 2px solid var(--cream); padding-bottom: 2rem; margin-bottom: 2rem; position: relative; }
+        .ar-tree-banner { height: 120px; background: radial-gradient(circle, #111 0%, #000 100%); border: 1px solid var(--cream); display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; position: relative; overflow: hidden; }
+        .ar-tree-banner::after { content: "🌿 [AR BLEEDING TREE ACTIVE]"; font-size: 0.9rem; letter-spacing: 2px; color: var(--cream); opacity: 0.8; }
+        
+        h1 { font-size: 2rem; letter-spacing: 3px; margin-bottom: 0.5rem; }
+        .tagline { font-style: italic; opacity: 0.9; }
+
+        nav { display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
+        nav a { color: var(--bg); background: var(--cream); padding: 0.5rem 1rem; text-decoration: none; font-weight: bold; border: 1px solid var(--cream); }
+        nav a:hover { background: var(--bg); color: var(--cream); }
+
+        section { border: 1px solid var(--cream); padding: 1.5rem; margin-bottom: 2rem; background: #050505; }
+        h2 { border-bottom: 1px solid var(--cream); padding-bottom: 0.5rem; margin-bottom: 1rem; font-size: 1.4rem; }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
+        .card { border: 1px solid var(--cream); padding: 1rem; background: #0a0a0a; display: flex; flex-direction: column; justify-content: space-between; }
+        .card h3 { margin-bottom: 0.5rem; font-size: 1.1rem; }
+        
+        .btn { display: block; text-align: center; margin-top: 1rem; padding: 0.5rem; border: 1px solid var(--cream); color: var(--cream); text-decoration: none; background: #000; cursor: pointer; }
+        .btn:hover { background: var(--cream); color: #000; }
+
+        footer { text-align: center; margin-top: 3rem; font-size: 0.8rem; opacity: 0.7; border-top: 1px solid var(--cream); padding-top: 1rem; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="ar-tree-banner"></div>
+        <h1>ECO EMO // AGENCY DEN</h1>
+        <p class="tagline">Grieve the earth. Save it anyway. (Created by Endling / Christopher Sneed)</p>
+    </header>
+
+    <nav>
+        <a href="#reclamation">Tier I: Reclamation</a>
+        <a href="#degradation">Tier II: Degradation</a>
+        <a href="#extinction">Tier III: Extinction</a>
+        <a href="#honeybee">Honey Bee Line</a>
+        <a href="#vault">The Core Vault (Music)</a>
+        <a href="#games">Games</a>
+        <a href="#worx">WORX (Scripts & Freelance)</a>
+    </nav>
+
+    <!-- TIER I -->
+    <section id="reclamation">
+        <h2>TIER I: RECLAMATION (Botanical & Soil Restoration)</h2>
+        <p>Album: <em>Iron and Ivy</em> | Focus: Rewilding, organic soils, native seed banks.</p>
+        <div class="grid" style="margin-top: 1rem;">
+            <div class="card">
+                <h3>Organic Cotton Flannel Overshirt</h3>
+                <p>Heavyweight GOTS-certified organic cotton in charcoal and black plaid with embroidered ƎE chest stamp.</p>
+                <a class="btn" href="https://buy.stripe.com/placeholder" target="_blank">Buy ($65)</a>
+            </div>
+            <div class="card">
+                <h3>Heirloom Wildflower & Tree Seed Tin</h3>
+                <p>Milkweed and American Chestnut restoration seeds in a reusable, compostable tin.</p>
+                <a class="btn" href="https://buy.stripe.com/placeholder" target="_blank">Buy ($22)</a>
+            </div>
+            <div class="card">
+                <h3>Soy Wax Pillar Candle ("Rootbound")</h3>
+                <p>Cedarwood, forest moss, and pine resin in organic soy wax with seed-paper labels.</p>
+                <a class="btn" href="https://buy.stripe.com/placeholder" target="_blank">Buy ($28)</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- TIER II -->
+    <section id="degradation">
+        <h2>TIER II: DEGRADATION (Industrial Critique & Upcycled Utility)</h2>
+        <p>Album: <em>Drowning in Ghost Threads</em> | Focus: Reclaiming industrial waste & urban decay.</p>
+        <div class="grid" style="margin-top: 1rem;">
+            <div class="card">
+                <h3>Heavyweight Organic Hoodie</h3>
+                <p>500gsm french terry in Pure Black with distressed thumbholes and agency den back art.</p>
+                <a class="btn" href="https://buy.stripe.com/placeholder" target="_blank">Buy ($75)</a>
+            </div>
+            <div class="card">
+                <h3>Acid-Wash Distressed Skinny Jeans</h3>
+                <p>Organic black denim with heavy knee shredding and eco-friendly enzyme wash.</p>
+                <a class="btn" href="https://buy.stripe.com/placeholder" target="_blank">Buy ($85)</a>
+            </div>
+            <div class="card">
+                <h3>Upcycled Gear Bookends</h3>
+                <p>Forged from reclaimed factory machinery gears and scrap steel in matte black.</p>
+                <a class="btn" href="https://buy.stripe.com/placeholder" target="_blank">Buy ($45)</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- TIER III -->
+    <section id="extinction">
+        <h2>TIER III: EXTINCTION (Memorial & Final Stand)</h2>
+        <p>Album: <em>Solastalgia</em> | Focus: Honoring extinct species & minimalist obsidian design.</p>
+        <div class="grid" style="margin-top: 1rem;">
+            <div class="card">
+                <h3>Minimalist Heavyweight Tee</h3>
+                <p>Pure black organic ring-spun cotton with mini ƎE chest stamp and skeletal back artwork.</p>
+                <a class="btn" href="https://buy.stripe.com/placeholder" target="_blank">Buy ($35)</a>
+            </div>
+            <div class="card">
+                <h3>Skeletal Line-Art Ceramic Vase</h3>
+                <p>Matte black ceramic hand-painted with minimalist white bone and floral line art.</p>
+                <a class="btn" href="https://buy.stripe.com/placeholder" target="_blank">Buy ($40)</a>
+            </div>
+            <div class="card">
+                <h3>Night-Blooming Cereus Resin Incense</h3>
+                <p>Sustainably gathered botanical resins for slow-burn meditation and release.</p>
+                <a class="btn" href="https://buy.stripe.com/placeholder" target="_blank">Buy ($18)</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- HONEY BEE LINE -->
+    <section id="honeybee">
+        <h2>SPECIAL COLLECTION: THE HONEY BEE LINE</h2>
+        <p>Dedicated to pollinator protection, pesticide-free agriculture, and hive preservation.</p>
+        <div class="grid" style="margin-top: 1rem;">
+            <div class="card">
+                <h3>"Save the Swarm" Organic Tee</h3>
+                <p>Mini ƎE honeybee chest logo and gothic anatomical bee back art in Aged Cream.</p>
+                <a class="btn" href="https://buy.stripe.com/placeholder" target="_blank">Buy ($35)</a>
+            </div>
+            <div class="card">
+                <h3>Wildflower Seed Bomb Tin</h3>
+                <p>50+ native wildflower seed balls formulated specifically to feed struggling honeybees.</p>
+                <a class="btn" href="https://buy.stripe.com/placeholder" target="_blank">Buy ($20)</a>
+            </div>
+            <div class="card">
+                <h3>Apiary Canvas Tote Bag</h3>
+                <p>Unbleached organic hemp canvas carryall with bold gothic conservation typography.</p>
+                <a class="btn" href="https://buy.stripe.com/placeholder" target="_blank">Buy ($25)</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- THE CORE VAULT (MUSIC) -->
+    <section id="vault">
+        <h2>THE CORE VAULT // ENDLING AUDIO STREAMING</h2>
+        <p>No Spotify embeds. Pure original post-hardcore, metalcore, and screamo tracks.</p>
+        <div class="card" style="margin-top: 1rem; background: #000;">
+            <h3>Endling — *Solastalgia* (Master Album Stream)</h3>
+            <p style="margin: 0.5rem 0;">Featuring: "Rootbound", "Chlorophyll & Rust", "Acid Rain Parade", "Endling's Escape", "The Endling's Solitude", "Ash on the Solstice".</p>
+            <audio controls style="width: 100%; margin-top: 1rem; filter: invert(1);">
+                <source src="#" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+        </div>
+    </section>
+
+    <!-- GAMES -->
+    <section id="games">
+        <h2>ECO EMO ARCADE // 2D PHYSICS GAMES</h2>
+        <div class="grid" style="margin-top: 1rem;">
+            <div class="card">
+                <h3>Plant Your Future (Tier I)</h3>
+                <p>Engineer root networks to stabilize toxic soil and unlock conservation seeds.</p>
+                <a class="btn" href="#" onclick="alert('Launching Plant Your Future build...')">Play Web Build</a>
+            </div>
+            <div class="card">
+                <h3>Endling's Escape (Tier II)</h3>
+                <p>2D momentum-based survival platformer with ragdoll slapstick physics.</p>
+                <a class="btn" href="#" onclick="alert('Launching Monster Mash / Endling Build...')">Play Web Build</a>
+            </div>
+            <div class="card">
+                <h3>Vaquita Deep (Tier III)</h3>
+                <p>Underwater acoustic navigation game tracking elusive marine mammals via sonar.</p>
+                <a class="btn" href="#" onclick="alert('Launching Vaquita Deep build...')">Play Web Build</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- WORX PORTAL -->
+    <section id="worx">
+        <h2>WORX // AUTOMATION & SCRIPT REPOSITORY</h2>
+        <p>Instant digital micro-licenses for developers and creators. Funding direct conservation.</p>
+        <div class="grid" style="margin-top: 1rem;">
+            <div class="card">
+                <h3>Wild Scribe Content Automation</h3>
+                <p>Python automated environmental writing & documentation pipeline.</p>
+                <a class="btn" href="https://buy.stripe.com/placeholder" target="_blank">Download ($15)</a>
+            </div>
+            <div class="card">
+                <h3>Cloudflare Worker API Boilerplate</h3>
+                <p>Zero-cost serverless edge deployment setup for e-commerce and audio.</p>
+                <a class="btn" href="https://buy.stripe.com/placeholder" target="_blank">Download ($25)</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Endling & Eco Emo Brand. All rights reserved. Grieve the earth. Save it anyway.</p>
+    </footer>
+
+</body>
+</html>
