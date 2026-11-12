@@ -1,3 +1,17 @@
+# 1. Clean any local cache or stale build artifacts
+rm -rf .wrangler dist build
+
+# 2. Touch index.html to force a fresh file modification timestamp
+touch index.html
+
+# 3. Stage all changes
+git add -A
+
+# 4. Commit with a force-deploy tag
+git commit -m "FORCE DEPLOY: Clean build, gothic Cinzel header, 3 tiers, honeybee line, audio vault, games, WORX portal"
+
+# 5. Push to main branch
+git push origin main
 git add .
 git commit -m "Execute full ecosystem deploy: gothic header, 3 tiers, honeybee line, vault audio, games, and WORX portal"
 git push origin main
