@@ -1,3 +1,6 @@
+git add .
+git commit -m "Execute full ecosystem deploy: gothic header, 3 tiers, honeybee line, vault audio, games, and WORX portal"
+git push origin main
 cd existing_repogit remote rename origin old-origin
 git remote add origin git@gitlab.com:ecoemo-group/ecoemo-agency-den.git
 git push --set-upstream origin --all
