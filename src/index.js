@@ -1,3 +1,51 @@
+/**
+ * EcoEmo Agency Den & Storefront Worker Entrypoint
+ * Manages routing, storefront API proxy, and Stripe/Printify hooks.
+ */
+
+import { handleStorefrontRequest } from './storefront.js';
+import { handleWebhookRequest } from './webhooks.js';
+
+export default {
+  async fetch(request, env, ctx) {
+    const url = new URL(request.url);
+    const path = url.pathname;
+
+    try {
+      // Route Stripe / Printify Webhooks
+      if (path.startsWith('/api/webhooks')) {
+        return await handleWebhookRequest(request, env);
+      }
+
+      // Route Storefront & Tier APIs (Reclamation, Degradation, Extinction)
+      if (path.startsWith('/api/') || path.startsWith('/store')) {
+        return await handleStorefrontRequest(request, env, ctx);
+      }
+
+      // Default Fallback / Static Asset Response
+      return new Response('EcoEmo Vault & Agency Den Active', {
+        status: 200,
+        headers: { 'Content-Type': 'text/plain; charset=utf-8' }
+      });
+
+    } catch (err) {
+      return new Response(JSON.stringify({ error: err.message }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+  },
+
+  async scheduled(event, env, ctx) {
+    // Automated daily cron tasks (inventory sync, catalog checks)
+    ctx.waitUntil(runDailyMaintenance(env));
+  }
+};
+
+async function runDailyMaintenance(env) {
+  // Add background maintenance tasks here if needed
+  console.log('Daily EcoEmo maintenance cron executed.');
+}
 name = "endling-studio"
 main = "src/index.js"
 compatibility_date = "2026-11-13"
