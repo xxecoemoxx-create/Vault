@@ -1,3 +1,15 @@
+name = "endling-studio"
+main = "src/index.js"
+compatibility_date = "2026-11-13"
+
+[vars]
+ENVIRONMENT = "production"
+
+# Secrets to configure via wrangler secret put:
+# - GITHUB_PAT
+# - VAULT_SECRET
+# - STRIPE_WEBHOOK_SECRET
+# - PRINTIFY_API_KEY
 npx wrangler secret put PAYPAL_API_SECRET
 /**
  * EcoEmo Ecosystem - Master API Gateway & Webhook Bridge
