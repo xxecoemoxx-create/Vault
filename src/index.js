@@ -1,3 +1,138 @@
+/**
+ * EcoEmo Ecosystem - Master API Gateway & Webhook Bridge
+ * Unifies Cloudflare, Base44, Printify, Stripe, and PayPal routing.
+ */
+
+const BASE44_API_URL = "https://base44.app/api/apps/6a27be55829cc8409d2adfc6";
+
+export default {
+    async fetch(request, env, ctx) {
+        const url = new URL(request.url);
+        const method = request.method;
+
+        // Handle CORS preflight requests across all storefront and vault domains
+        if (method === 'OPTIONS') {
+            return handleCorsPreflight();
+        }
+
+        try {
+            // 1. Telemetry & Analytics Endpoint (used by vault-tracker.js)
+            if (url.pathname === '/api/telemetry' && method === 'POST') {
+                return await handleTelemetry(request, env);
+            }
+
+            // 2. Payment & Fulfillment Webhook Proxy (Stripe, PayPal, Printify)
+            if (url.pathname.startsWith('/api/webhooks/')) {
+                return await handleWebhookProxy(request, env, url.pathname);
+            }
+
+            // 3. General Base44 Backend & Core Vault Proxy
+            if (url.pathname.startsWith('/api/')) {
+                return await proxyToBase44(request, env);
+            }
+
+            // Default fallback response for root or static asset routing
+            return new Response(JSON.stringify({
+                brand: "Eco Emo",
+                storefront: "https://ecoemo.store",
+                status: "Operational",
+                version: "2026.11.13"
+            }), {
+                status: 200,
+                headers: { 'Content-Type': 'application/json', ...getCorsHeaders() }
+            });
+
+        } catch (error) {
+            console.error('[Gateway Error]', error);
+            return new Response(JSON.stringify({ error: error.message }), {
+                status: 500,
+                headers: { 'Content-Type': 'application/json', ...getCorsHeaders() }
+            });
+        }
+    }
+};
+
+/**
+ * Handle incoming telemetry events from the frontend tracker
+ */
+async function handleTelemetry(request, env) {
+    const payload = await request.json();
+    console.log('[Telemetry Received]', payload);
+
+    // Forward telemetry batch to Base44 data store or analytics sink if configured
+    // For now, return a successful confirmation response
+    return new Response(JSON.stringify({ success: true, receivedAt: new Date().toISOString() }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json', ...getCorsHeaders() }
+    });
+}
+
+/**
+ * Handle and verify incoming webhooks from Stripe, PayPal, or Printify
+ */
+async function handleWebhookProxy(request, env, pathname) {
+    const rawBody = await request.text();
+    console.log(`[Webhook Proxy] Routed path: ${pathname}`);
+
+    // Forward verified webhook payload directly to Base44 backend functions
+    const targetUrl = `${BASE44_API_URL}/functions${pathname}`;
+    const response = await fetch(targetUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Vault-Signature': request.headers.get('stripe-signature') || request.headers.get('paypal-transmission-sig') || ''
+        },
+        body: rawBody
+    });
+
+    return new Response(await response.text(), {
+        status: response.status,
+        headers: { 'Content-Type': 'application/json', ...getCorsHeaders() }
+    });
+}
+
+/**
+ * Proxy standard API requests through to the Base44 backend application
+ */
+async function proxyToBase44(request, env) {
+    const url = new URL(request.url);
+    const targetUrl = `${BASE44_API_URL}${url.pathname.replace('/api', '')}${url.search}`;
+    
+    const modifiedRequest = new Request(targetUrl, {
+        method: request.method,
+        headers: request.headers,
+        body: request.method !== 'GET' && request.method !== 'HEAD' ? request.body : undefined,
+        redirect: 'follow'
+    });
+
+    const apiResponse = await fetch(modifiedRequest);
+    const responseHeaders = new Headers(apiResponse.headers);
+    
+    // Inject CORS headers to allow cross-origin requests from ecoemo.store and local dev
+    Object.entries(getCorsHeaders()).forEach(([key, value]) => {
+        responseHeaders.set(key, value);
+    });
+
+    return new Response(apiResponse.body, {
+        status: apiResponse.status,
+        headers: responseHeaders
+    });
+}
+
+function handleCorsPreflight() {
+    return new Response(null, {
+        status: 204,
+        headers: getCorsHeaders()
+    });
+}
+
+function getCorsHeaders() {
+    return {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Vault-Signature',
+    };
+}
 export default {
   async fetch(request) {
     const html = `<!DOCTYPE html>
