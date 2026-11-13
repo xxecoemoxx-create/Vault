@@ -1,3 +1,5 @@
+npx wrangler deploy --minify src/index.js
+npx wrangler kv:key put --binding=CACHE_KV "VERSION" "2026.11.13-vault"
 <!-- Core Vault v2.0 Embed Integration for ecoemo.store -->
 <div id="core-vault-container" style="background-color: #0b0b0b; color: #f4eee1; padding: 20px; border-radius: 8px;">
     <h2 style="font-family: 'Cinzel', serif; color: #f4eee1; letter-spacing: 2px;">ENDLING // CORE VAULT</h2>
