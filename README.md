@@ -1,3 +1,17 @@
+<!-- Core Vault v2.0 Embed Integration for ecoemo.store -->
+<div id="core-vault-container" style="background-color: #0b0b0b; color: #f4eee1; padding: 20px; border-radius: 8px;">
+    <h2 style="font-family: 'Cinzel', serif; color: #f4eee1; letter-spacing: 2px;">ENDLING // CORE VAULT</h2>
+    <p style="font-size: 14px; opacity: 0.8;">Solastalgia Music Dossier & Audio Vault</p>
+    
+    <iframe src="https://base44.app/api/apps/6a27be55829cc8409d2adfc6/embed/vault?key=ecoemo_vault_2026" 
+            width="100%" 
+            height="450" 
+            style="border: 1px solid #333; border-radius: 4px; background: #000;" 
+            allow="encrypted-media"
+            title="Endling Core Vault Player">
+    </iframe>
+</div>
+npx wrangler deploy --minify src/index.js
 export default {
     async fetch(request, env, ctx) {
         const url = new URL(request.url);
