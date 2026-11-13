@@ -1,3 +1,7 @@
+git add src/index.js wrangler.toml
+git commit -m "fix: consolidate worker exports and streamline deployment entrypoint"
+git push origin main
+npx wrangler deploy
 npx wrangler secret put STRIPE_WEBHOOK_SECRET
 npx wrangler secret put PRINTIFY_API_KEY
 export default {
