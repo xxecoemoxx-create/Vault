@@ -1,3 +1,4 @@
+npx wrangler secret put PAYPAL_API_SECRET
 /**
  * EcoEmo Ecosystem - Master API Gateway & Webhook Bridge
  * Unifies Cloudflare, Base44, Printify, Stripe, and PayPal routing.
