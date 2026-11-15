@@ -1,0 +1,98 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Plant Your Future — Eco Emo Arcade</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Oswald:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;color:#c8c0a8;font-family:'Oswald',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px;gap:12px}
+.bar{width:100%;max-width:660px;display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#9a9280}
+.bar a{color:#4a9b7a;text-decoration:none;border-bottom:1px solid rgba(74,155,122,.4);padding-bottom:2px}
+h1{font-family:'Cinzel',serif;font-size:15px;letter-spacing:3px;color:#e8e0cc;text-align:center}
+.stage{position:relative;width:100%;max-width:660px;border:1px solid rgba(74,155,122,.3);background:#050605}
+canvas{display:block;width:100%;height:auto;touch-action:none}
+.hud{position:absolute;top:8px;left:10px;right:10px;display:flex;justify-content:space-between;font-size:10px;letter-spacing:2px;color:#c8c0a8;text-transform:uppercase;pointer-events:none}
+.overlay{position:absolute;inset:0;background:rgba(0,0,0,.86);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:20px}
+.overlay.hide{display:none}
+.overlay h2{font-family:'Cinzel',serif;font-size:18px;letter-spacing:3px}
+.overlay p{font-family:'Crimson Pro',Georgia,serif;font-size:15px;color:#9a9280;max-width:40ch;font-style:italic}
+button{font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;background:#000;color:#c8c0a8;border:1px solid rgba(74,155,122,.55);padding:11px 22px;cursor:pointer}
+button:hover{background:rgba(74,155,122,.16)}
+.hint{font-size:9px;letter-spacing:2px;color:#6f6a5c;text-transform:uppercase}
+</style></head><body>
+<div class="bar"><a href="/games">← Arcade</a><h1>PLANT YOUR FUTURE</h1><span>Tier I · Reclamation</span></div>
+<div class="stage">
+  <canvas id="c" width="640" height="420"></canvas>
+  <div class="hud"><span id="hud">Water 0/12 · Root 3</span><span id="depth">0 m</span></div>
+  <div class="overlay" id="ov">
+    <h2>GROW THE ROOT</h2>
+    <p>Steer the root down through poisoned soil. Drink every water pocket. Slag kills the root.</p>
+    <button id="go">Start growing</button>
+    <div class="hint">← → or A / D · tap left or right side</div>
+  </div>
+</div>
+<div class="hint" style="font-size:10px;letter-spacing:2px">Eco Emo Arcade · grieve the earth. save it anyway.</div>
+<script>
+(function(){
+  var cv=document.getElementById('c'), ctx=cv.getContext('2d');
+  var W=640,H=420;
+  var G={running:false,over:false,score:0,lives:3,dist:0,speed:96,tip:W/2,left:false,right:false,drops:[],slag:[],last:0,need:12};
+  window.__game=G;
+  function reset(){
+    G.running=true;G.over=false;G.score=0;G.lives=3;G.dist=0;G.speed=96;G.tip=W/2;G.drops=[];G.slag=[];G.last=performance.now();
+    for(var i=0;i<7;i++){spawnRow(120+i*72);}
+    syncHud();document.getElementById('ov').classList.add('hide');
+  }
+  function spawnRow(y){
+    var dropX=40+Math.random()*(W-80);
+    G.drops.push({x:dropX,y:y,r:9,got:false});
+    if(Math.random()<0.78){var sx=40+Math.random()*(W-80); if(Math.abs(sx-dropX)<70){sx=(sx+W/2)%(W-80)+40;} G.slag.push({x:sx,y:y-26,r:11+Math.random()*9});}
+  }
+  function syncHud(){
+    document.getElementById('hud').textContent='Water '+G.score+'/'+G.need+' · Root '+G.lives;
+    document.getElementById('depth').textContent=Math.floor(G.dist)+' m';
+  }
+  function step(dt){
+    if(!G.running)return;
+    var s=G.speed;
+    G.dist+=s*dt;
+    if(G.left)G.tip-=230*dt; if(G.right)G.tip+=230*dt;
+    G.tip=Math.max(16,Math.min(W-16,G.tip));
+    var move=s*dt, respawn=false;
+    G.drops.forEach(function(d){d.y-=move; if(!d.got&&Math.abs(d.y-92)<16&&Math.abs(d.x-G.tip)<22){d.got=true;G.score++;respawn=true;}});
+    G.slag.forEach(function(k){k.y-=move; if(Math.abs(k.y-92)<20&&Math.abs(k.x-G.tip)<k.r+9){k.hit=true;G.lives--;}});
+    G.slag=G.slag.filter(function(k){return !k.hit&&k.y>-40;});
+    G.drops=G.drops.filter(function(d){return d.y>-40&&!d.got;});
+    if(respawn){var lowest=0;G.drops.forEach(function(d){lowest=Math.max(lowest,d.y);});for(var i=0;i<3;i++){spawnRow(lowest+72*(i+1)+Math.random()*20);}G.speed=Math.min(190,G.speed+4);}
+    if(G.score>=G.need){end('THE ROOT HELD','Reclamation complete. ' + G.score + ' water pockets, ' + Math.floor(G.dist) + ' metres of soil stabilised.');}
+    else if(G.lives<=0){end('ROOT ROTTED','The slag got it at ' + Math.floor(G.dist) + ' metres. The soil does not forgive twice.');}
+    syncHud();
+  }
+  function end(t,m){G.running=false;G.over=true;var ov=document.getElementById('ov');ov.innerHTML='<h2>'+t+'</h2><p>'+m+'</p><button id="go">Grow again</button><div class="hint">← → or A / D</div>';ov.classList.remove('hide');document.getElementById('go').onclick=reset;}
+  function draw(){
+    ctx.fillStyle='#050605';ctx.fillRect(0,0,W,H);
+    // soil gradient
+    var g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#0b120d');g.addColorStop(1,'#120d0b');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+    // strata
+    ctx.strokeStyle='rgba(74,155,122,.08)';ctx.lineWidth=1;
+    for(var y=0;y<H;y+=40){ctx.beginPath();ctx.moveTo(0,y+((G.dist%40)));ctx.lineTo(W,y+((G.dist%40)));ctx.stroke();}
+    // seed
+    ctx.fillStyle='#4a9b7a';ctx.beginPath();ctx.arc(W/2,26,7,0,7);ctx.fill();
+    // root line
+    ctx.strokeStyle='rgba(200,192,168,.5)';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(W/2,30);
+    for(var i=0;i<=10;i++){var t=i/10;ctx.lineTo(W/2+(G.tip-W/2)*t, 30+ (92-30)*t + Math.sin(t*6)*(6*(1-t)));}ctx.stroke();
+    // drops
+    G.drops.forEach(function(d){ctx.fillStyle='#5ad2a4';ctx.beginPath();ctx.arc(d.x,d.y,d.r,0,7);ctx.fill();ctx.fillStyle='rgba(90,210,164,.18)';ctx.beginPath();ctx.arc(d.x,d.y,d.r+7,0,7);ctx.fill();});
+    // slag
+    G.slag.forEach(function(k){ctx.fillStyle='#3a2a22';ctx.beginPath();ctx.arc(k.x,k.y,k.r,0,7);ctx.fill();ctx.strokeStyle='#6b3b2b';ctx.lineWidth=2;ctx.stroke();});
+    // tip
+    ctx.fillStyle='#c8c0a8';ctx.beginPath();ctx.arc(G.tip,92,6,0,7);ctx.fill();
+    ctx.strokeStyle='rgba(200,192,168,.35)';ctx.beginPath();ctx.arc(G.tip,92,12,0,7);ctx.stroke();
+  }
+  function loop(now){var dt=Math.min(.05,(now-(G.last||now))/1000);G.last=now;step(dt);draw();requestAnimationFrame(loop);}
+  document.addEventListener('keydown',function(e){if(e.key==='ArrowLeft'||e.key==='a'||e.key==='A')G.left=true;if(e.key==='ArrowRight'||e.key==='d'||e.key==='D')G.right=true;if((e.key===' '||e.key==='Enter')&&!G.running){var b=document.getElementById('go');if(b)b.click();}});
+  document.addEventListener('keyup',function(e){if(e.key==='ArrowLeft'||e.key==='a'||e.key==='A')G.left=false;if(e.key==='ArrowRight'||e.key==='d'||e.key==='D')G.right=false;});
+  cv.addEventListener('pointerdown',function(e){var r=cv.getBoundingClientRect();if(e.clientX-r.left<r.width/2)G.left=true;else G.right=true;});
+  cv.addEventListener('pointerup',function(){G.left=false;G.right=false;});
+  cv.addEventListener('pointerleave',function(){G.left=false;G.right=false;});
+  document.getElementById('go').onclick=reset;
+  requestAnimationFrame(loop);
+})();
+</script></body></html>
