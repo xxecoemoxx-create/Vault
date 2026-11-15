@@ -1,0 +1,104 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Endling's Escape — Eco Emo Arcade</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Oswald:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;color:#c8c0a8;font-family:'Oswald',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px;gap:12px}
+.bar{width:100%;max-width:660px;display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#9a9280}
+.bar a{color:#4a9b7a;text-decoration:none;border-bottom:1px solid rgba(74,155,122,.4);padding-bottom:2px}
+h1{font-family:'Cinzel',serif;font-size:15px;letter-spacing:3px;color:#e8e0cc;text-align:center}
+.stage{position:relative;width:100%;max-width:660px;border:1px solid rgba(74,155,122,.3);background:#050605}
+canvas{display:block;width:100%;height:auto;touch-action:none}
+.hud{position:absolute;top:8px;left:10px;right:10px;display:flex;justify-content:space-between;font-size:10px;letter-spacing:2px;color:#c8c0a8;text-transform:uppercase;pointer-events:none}
+.overlay{position:absolute;inset:0;background:rgba(0,0,0,.86);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:20px}
+.overlay.hide{display:none}
+.overlay h2{font-family:'Cinzel',serif;font-size:18px;letter-spacing:3px}
+.overlay p{font-family:'Crimson Pro',Georgia,serif;font-size:15px;color:#9a9280;max-width:40ch;font-style:italic}
+button{font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;background:#000;color:#c8c0a8;border:1px solid rgba(74,155,122,.55);padding:11px 22px;cursor:pointer}
+button:hover{background:rgba(74,155,122,.16)}
+.hint{font-size:9px;letter-spacing:2px;color:#6f6a5c;text-transform:uppercase}
+</style></head><body>
+<div class="bar"><a href="/games">← Arcade</a><h1>ENDLING'S ESCAPE</h1><span>Tier II · Degradation</span></div>
+<div class="stage">
+  <canvas id="c" width="640" height="420"></canvas>
+  <div class="hud"><span id="hud">Embers 0 · Body 3</span><span id="dist">0 m</span></div>
+  <div class="overlay" id="ov">
+    <h2>RUN BEFORE THE ASH</h2>
+    <p>The ground is already gone behind you. Jump the spikes, bank the embers, keep moving.</p>
+    <button id="go">Start running</button>
+    <div class="hint">Space / ↑ to jump · tap the screen</div>
+  </div>
+</div>
+<div class="hint" style="font-size:10px;letter-spacing:2px">Eco Emo Arcade · grieve the earth. save it anyway.</div>
+<script>
+(function(){
+  var cv=document.getElementById('c'),ctx=cv.getContext('2d');
+  var W=640,H=420,GROUND=344;
+  var G={running:false,over:false,score:0,lives:3,dist:0,speed:210,px:120,py:GROUND,vy:0,onGround:true,spikes:[],embers:[],nextSpawn:0,nextEmber:0,inv:0,last:0};
+  window.__game=G;
+  function reset(){
+    G.running=true;G.over=false;G.score=0;G.lives=3;G.dist=0;G.speed=210;G.px=120;G.py=GROUND;G.vy=0;G.onGround=true;
+    G.spikes=[];G.embers=[];G.nextSpawn=520;G.nextEmber=300;G.inv=0;G.last=performance.now();
+    document.getElementById('ov').classList.add('hide');sync();
+  }
+  function sync(){document.getElementById('hud').textContent='Embers '+G.score+' · Body '+Math.max(0,G.lives);document.getElementById('dist').textContent=Math.floor(G.dist)+' m';}
+  function jump(){if(!G.running)return;if(G.onGround){G.vy=-560;G.onGround=false;}}
+  function step(dt){
+    if(!G.running)return;
+    var sp=G.speed;
+    G.dist+=sp*dt/10;
+    if(!G.onGround){G.vy+=1750*dt;G.py+=G.vy*dt;if(G.py>=GROUND){G.py=GROUND;G.vy=0;G.onGround=true;}}
+    if(G.inv>0)G.inv-=dt;
+    G.nextSpawn-=sp*dt;G.nextEmber-=sp*dt;
+    if(G.nextSpawn<=0){var wide=24+Math.random()*26;G.spikes.push({x:W+40,w:wide,h:16+Math.random()*18});G.nextSpawn=150+Math.random()*150;}
+    if(G.nextEmber<=0){G.embers.push({x:W+30,y:GROUND-58-Math.random()*60,got:false});G.nextEmber=200+Math.random()*220;}
+    var move=sp*dt;
+    G.spikes.forEach(function(s){s.x-=move;});
+    G.embers.forEach(function(e){e.x-=move;
+      if(!e.got&&Math.abs(e.x-G.px)<20&&Math.abs(e.y-(G.py-18))<26){e.got=true;G.score++;G.speed=Math.min(330,G.speed+3);}
+    });
+    G.spikes.forEach(function(s){
+      if(G.inv<=0&&G.px+11>s.x&&G.px-11<s.x+s.w&&G.py>GROUND-s.h){G.lives--;G.inv=1.3;s.x-=60;}
+    });
+    G.spikes=G.spikes.filter(function(s){return s.x>-80;});
+    G.embers=G.embers.filter(function(e){return e.x>-40&&!e.got;});
+    sync();
+    if(G.lives<=0){end('THE ASH CAUGHT YOU','You held ' + Math.floor(G.dist) + ' metres and banked ' + G.score + ' embers. Nothing here stays.');}
+  }
+  function end(t,m){G.running=false;G.over=true;var ov=document.getElementById('ov');ov.innerHTML='<h2>'+t+'</h2><p>'+m+'</p><button id="go">Run again</button><div class="hint">Space / ↑ to jump</div>';ov.classList.remove('hide');document.getElementById('go').onclick=reset;}
+  function draw(){
+    var sky=ctx.createLinearGradient(0,0,0,H);sky.addColorStop(0,'#0a0806');sky.addColorStop(.7,'#14100c');sky.addColorStop(1,'#1a120c');
+    ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
+    // ash fall
+    ctx.fillStyle='rgba(200,192,168,.10)';
+    for(var i=0;i<40;i++){var ax=(i*97+(G.dist*7))%(W+20)-10, ay=(i*61+(G.dist*3))%(H-40);ctx.fillRect(ax,ay,2,2);}
+    // ridge
+    ctx.fillStyle='#0d0a08';ctx.beginPath();ctx.moveTo(0,GROUND-40);
+    for(var x=0;x<=W;x+=40){ctx.lineTo(x,GROUND-40-Math.sin((x+G.dist*4)/90)*22);}
+    ctx.lineTo(W,H);ctx.lineTo(0,H);ctx.fill();
+    // ground
+    ctx.fillStyle='#161210';ctx.fillRect(0,GROUND,W,H-GROUND);
+    ctx.strokeStyle='rgba(74,155,122,.35)';ctx.beginPath();ctx.moveTo(0,GROUND);ctx.lineTo(W,GROUND);ctx.stroke();
+    // spikes
+    G.spikes.forEach(function(s){
+      ctx.fillStyle='#6b3b2b';ctx.beginPath();ctx.moveTo(s.x,GROUND);ctx.lineTo(s.x+s.w/2,GROUND-s.h);ctx.lineTo(s.x+s.w,GROUND);ctx.closePath();ctx.fill();
+      ctx.strokeStyle='#b4462f';ctx.lineWidth=1.5;ctx.stroke();
+    });
+    // embers
+    G.embers.forEach(function(e){
+      ctx.fillStyle='#d9a05b';ctx.beginPath();ctx.arc(e.x,e.y,5,0,7);ctx.fill();
+      ctx.fillStyle='rgba(217,160,91,.20)';ctx.beginPath();ctx.arc(e.x,e.y,12,0,7);ctx.fill();
+    });
+    // runner
+    if(G.inv>0&&Math.floor(G.inv*10)%2===0){ctx.globalAlpha=.35;}
+    ctx.fillStyle='#c8c0a8';ctx.fillRect(G.px-9,G.py-30,18,30);
+    ctx.beginPath();ctx.arc(G.px,G.py-38,8,0,7);ctx.fill();
+    ctx.strokeStyle='#4a9b7a';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(G.px-4,G.py);ctx.lineTo(G.px-12,G.py+8);ctx.moveTo(G.px+4,G.py);ctx.lineTo(G.px+14,G.py+6);ctx.stroke();
+    ctx.globalAlpha=1;
+  }
+  function loop(now){var dt=Math.min(.05,(now-(G.last||now))/1000);G.last=now;step(dt);draw();requestAnimationFrame(loop);}
+  document.addEventListener('keydown',function(e){if(e.key===' '||e.key==='ArrowUp'||e.key==='w'||e.key==='W'){e.preventDefault();if(!G.running){var b=document.getElementById('go');if(b)b.click();}else jump();}});
+  cv.addEventListener('pointerdown',function(){if(!G.running){var b=document.getElementById('go');if(b)b.click();}else jump();});
+  document.getElementById('go').onclick=reset;
+  requestAnimationFrame(loop);
+})();
+</script></body></html>
