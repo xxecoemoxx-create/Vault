@@ -1,0 +1,56 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Eco Emo Arcade — 2D Games | Eco Emo</title>
+<meta name="description" content="Three 2D arcade games from Eco Emo, one per conservation tier. Play in the browser, no install.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Oswald:wght@300;400;600&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#000;--cream:#c8c0a8;--dim:#9a9280;--green:#4a9b7a;--line:rgba(74,155,122,.24)}
+body{background:#000;color:var(--cream);font-family:'Crimson Pro',Georgia,serif;line-height:1.7}
+.wrap{max-width:1060px;margin:0 auto;padding:0 22px 60px}
+header.top{border-bottom:1px solid var(--line);padding:26px 0 20px;margin-bottom:40px}
+.eyebrow{font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--green)}
+h1{font-family:'Cinzel',serif;font-size:clamp(26px,5vw,44px);letter-spacing:3px;line-height:1.1;margin:12px 0 14px}
+.lede{color:var(--dim);font-size:17px;max-width:64ch;font-style:italic}
+.back{font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--dim);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px}
+.back:hover{color:var(--green)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:16px}
+.card{border:1px solid var(--line);background:#070707;padding:20px;display:flex;flex-direction:column;gap:10px;transition:transform .25s,border-color .25s}
+.card:hover{transform:translateY(-3px);border-color:rgba(74,155,122,.55)}
+.tier{font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--green)}
+.card h3{font-family:'Cinzel',serif;font-size:16px;letter-spacing:1.5px;line-height:1.35}
+.card p{font-size:15px;color:var(--dim);flex:1}
+.ctrl{font-family:'Oswald',sans-serif;font-size:9px;letter-spacing:2px;color:var(--dim);text-transform:uppercase}
+.btn{display:block;text-align:center;padding:11px 14px;border:1px solid rgba(74,155,122,.5);color:var(--cream);text-decoration:none;font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;transition:background .25s,color .25s}
+.btn:hover{background:rgba(74,155,122,.16);color:#e8e0cc}
+footer{margin-top:56px;padding-top:22px;border-top:1px solid var(--line);font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--dim);text-align:center}
+</style></head><body><div class="wrap">
+<header class="top">
+  <div class="eyebrow">Eco Emo · Arcade</div>
+  <h1>ECO EMO ARCADE // 2D GAMES</h1>
+  <p class="lede">Three builds, one per tier. No install, no accounts, no leaderboards to feed. Keyboard or thumb.</p>
+  <p style="margin-top:18px"><a class="back" href="/">← Back to the surface</a></p>
+</header>
+<div class="grid">
+  <div class="card">
+    <div class="tier">Tier I · Reclamation</div>
+    <h3>Plant Your Future</h3>
+    <p>Steer a root network down through toxic soil. Drink every water pocket, dodge the slag, keep the root alive.</p>
+    <div class="ctrl">← → or A / D · tap left / right</div>
+    <a class="btn" href="/games/reclamation">Play</a>
+  </div>
+  <div class="card">
+    <div class="tier">Tier II · Degradation</div>
+    <h3>Endling's Escape</h3>
+    <p>Momentum platformer. The ground is already gone behind you. Jump the spikes, bank the embers, outrun the ash.</p>
+    <div class="ctrl">Space / ↑ to jump · tap to jump</div>
+    <a class="btn" href="/games/degradation">Play</a>
+  </div>
+  <div class="card">
+    <div class="tier">Tier III · Extinction</div>
+    <h3>Vaquita Deep</h3>
+    <p>Sonar navigation in black water. Ping to find the last pods, avoid the gillnets, spend oxygen like it's the last of it.</p>
+    <div class="ctrl">WASD / arrows · Space to ping · tap to ping</div>
+    <a class="btn" href="/games/extinction">Play</a>
+  </div>
+</div>
+<footer>Eco Emo Arcade · grieve the earth. save it anyway.</footer>
+</div></body></html>
