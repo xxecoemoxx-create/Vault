@@ -1,0 +1,130 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Vaquita Deep — Eco Emo Arcade</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Oswald:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;color:#c8c0a8;font-family:'Oswald',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px;gap:12px}
+.bar{width:100%;max-width:660px;display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#9a9280}
+.bar a{color:#4a9b7a;text-decoration:none;border-bottom:1px solid rgba(74,155,122,.4);padding-bottom:2px}
+h1{font-family:'Cinzel',serif;font-size:15px;letter-spacing:3px;color:#e8e0cc;text-align:center}
+.stage{position:relative;width:100%;max-width:660px;border:1px solid rgba(74,155,122,.3);background:#020406}
+canvas{display:block;width:100%;height:auto;touch-action:none}
+.hud{position:absolute;top:8px;left:10px;right:10px;display:flex;justify-content:space-between;font-size:10px;letter-spacing:2px;color:#c8c0a8;text-transform:uppercase;pointer-events:none}
+.overlay{position:absolute;inset:0;background:rgba(0,0,0,.88);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:20px}
+.overlay.hide{display:none}
+.overlay h2{font-family:'Cinzel',serif;font-size:18px;letter-spacing:3px}
+.overlay p{font-family:'Crimson Pro',Georgia,serif;font-size:15px;color:#9a9280;max-width:42ch;font-style:italic}
+button{font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;background:#000;color:#c8c0a8;border:1px solid rgba(74,155,122,.55);padding:11px 22px;cursor:pointer}
+button:hover{background:rgba(74,155,122,.16)}
+.hint{font-size:9px;letter-spacing:2px;color:#6f6a5c;text-transform:uppercase}
+</style></head><body>
+<div class="bar"><a href="/games">← Arcade</a><h1>VAQUITA DEEP</h1><span>Tier III · Extinction</span></div>
+<div class="stage">
+  <canvas id="c" width="640" height="420"></canvas>
+  <div class="hud"><span id="hud">Found 0/3 · O₂ 100</span><span id="ping">Sonar ready</span></div>
+  <div class="overlay" id="ov">
+    <h2>THE LAST POD</h2>
+    <p>Black water, ten metres of visibility, and a gillnet you cannot see. Ping to find the vaquita. Every ping costs air.</p>
+    <button id="go">Dive</button>
+    <div class="hint">WASD / arrows to move · Space to ping · tap to ping</div>
+  </div>
+</div>
+<div class="hint" style="font-size:10px;letter-spacing:2px">Eco Emo Arcade · grieve the earth. save it anyway.</div>
+<script>
+(function(){
+  var cv=document.getElementById('c'),ctx=cv.getContext('2d');
+  var W=640,H=420;
+  var G={running:false,over:false,found:0,o2:100,px:W/2,py:H/2,reveal:0,cooldown:0,pods:[],nets:[],keys:{},last:0,hurt:0,need:3};
+  window.__game=G;
+  function rnd(a,b){return a+Math.random()*(b-a);}
+  function reset(){
+    G.running=true;G.over=false;G.found=0;G.o2=100;G.px=W/2;G.py=H/2;G.reveal=0;G.cooldown=0;G.hurt=0;G.last=performance.now();G.keys={};
+    G.pods=[];for(var i=0;i<3;i++){G.pods.push({x:rnd(70,W-70),y:rnd(70,H-70),found:false,phase:Math.random()*7});}
+    G.nets=[];for(var j=0;j<7;j++){var x=rnd(60,W-120),y=rnd(60,H-80),len=rnd(70,150),vert=Math.random()<.5;G.nets.push({x1:x,y1:y,x2:vert?x:x+len,y2:vert?y+len:y});}
+    document.getElementById('ov').classList.add('hide');sync();
+  }
+  function sync(){
+    document.getElementById('hud').textContent='Found '+G.found+'/'+G.need+' · O₂ '+Math.max(0,Math.round(G.o2));
+    document.getElementById('ping').textContent=G.cooldown>0?'recharging '+G.cooldown.toFixed(1)+'s':'sonar ready';
+  }
+  function distSeg(px,py,x1,y1,x2,y2){
+    var dx=x2-x1,dy=y2-y1,l2=dx*dx+dy*dy,t=l2?((px-x1)*dx+(py-y1)*dy)/l2:0;t=Math.max(0,Math.min(1,t));
+    var cx=x1+t*dx,cy=y1+t*dy;return Math.hypot(px-cx,py-cy);
+  }
+  function ping(){
+    if(!G.running||G.cooldown>0)return;
+    G.reveal=1.7;G.cooldown=2.4;G.o2-=3.5;
+  }
+  function step(dt){
+    if(!G.running)return;
+    G.o2-=1.15*dt;
+    if(G.reveal>0)G.reveal-=dt;
+    if(G.cooldown>0)G.cooldown=Math.max(0,G.cooldown-dt);
+    if(G.hurt>0)G.hurt-=dt;
+    var sp=165;
+    if(G.keys.left)G.px-=sp*dt; if(G.keys.right)G.px+=sp*dt;
+    if(G.keys.up)G.py-=sp*dt; if(G.keys.down)G.py+=sp*dt;
+    G.px=Math.max(16,Math.min(W-16,G.px));G.py=Math.max(16,Math.min(H-16,G.py));
+    G.pods.forEach(function(p){
+      if(!p.found&&Math.hypot(p.x-G.px,p.y-G.py)<22){p.found=true;G.found++;G.o2=Math.min(100,G.o2+8);}
+    });
+    if(G.hurt<=0){G.nets.forEach(function(n){if(distSeg(G.px,G.py,n.x1,n.y1,n.x2,n.y2)<12){G.o2-=16;G.hurt=1.4;}});}
+    sync();
+    if(G.found>=G.need){end('POD LOCATED','All three found with ' + Math.max(0,Math.round(G.o2)) + '% air left. Ten left in the whole gulf. Ten.');}
+    else if(G.o2<=0){end('OUT OF AIR','You found ' + G.found + ' of 3 pods. The nets do not need to see you to catch you.');}
+  }
+  function end(t,m){G.running=false;G.over=true;var ov=document.getElementById('ov');ov.innerHTML='<h2>'+t+'</h2><p>'+m+'</p><button id="go">Dive again</button><div class="hint">WASD / arrows · Space to ping</div>';ov.classList.remove('hide');document.getElementById('go').onclick=reset;}
+  function draw(){
+    var g=ctx.createRadialGradient(W/2,H/2,20,W/2,H/2,W*.75);
+    g.addColorStop(0,'#04100f');g.addColorStop(1,'#010304');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+    // drifting particulates
+    ctx.fillStyle='rgba(120,200,180,.10)';
+    for(var i=0;i<50;i++){var x=(i*113+performance.now()/60)%W, y=(i*67+performance.now()/110)%H;ctx.fillRect(x,y,2,2);}
+    // ping wave
+    if(G.reveal>0){
+      var p=1-G.reveal/1.7;
+      ctx.strokeStyle='rgba(74,155,122,'+(0.55*(1-p))+')';ctx.lineWidth=2;
+      ctx.beginPath();ctx.arc(G.px,G.py,40+p*520,0,7);ctx.stroke();
+      // nets visible
+      ctx.strokeStyle='rgba(180,70,47,'+Math.min(1,G.reveal)+')';ctx.lineWidth=2;
+      G.nets.forEach(function(n){ctx.beginPath();ctx.moveTo(n.x1,n.y1);ctx.lineTo(n.x2,n.y2);ctx.stroke();
+        for(var k=0;k<=1;k+=0.2){var mx=n.x1+(n.x2-n.x1)*k,my=n.y1+(n.y2-n.y1)*k;ctx.beginPath();ctx.arc(mx,my,1.6,0,7);ctx.fillStyle='rgba(180,70,47,'+Math.min(1,G.reveal)+')';ctx.fill();}
+      });
+      ctx.fillStyle='rgba(200,192,168,'+Math.min(1,G.reveal)+')';
+      G.pods.forEach(function(p2){if(p2.found)return;ctx.beginPath();ctx.arc(p2.x,p2.y,9,0,7);ctx.fill();ctx.strokeStyle='rgba(200,192,168,.8)';ctx.beginPath();ctx.arc(p2.x,p2.y,16,0,7);ctx.stroke();});
+    } else {
+      // faint glimmer so it stays playable
+      G.pods.forEach(function(p2){if(p2.found)return;var a=0.10+0.06*Math.sin(performance.now()/420+p2.phase);ctx.fillStyle='rgba(200,192,168,'+a+')';ctx.beginPath();ctx.arc(p2.x,p2.y,7,0,7);ctx.fill();});
+    }
+    // found pods marker
+    G.pods.forEach(function(p2){if(!p2.found)return;ctx.strokeStyle='rgba(74,155,122,.6)';ctx.beginPath();ctx.arc(p2.x,p2.y,11,0,7);ctx.stroke();});
+    // sub
+    ctx.save();ctx.translate(G.px,G.py);
+    if(G.hurt>0&&Math.floor(G.hurt*10)%2===0)ctx.globalAlpha=.4;
+    ctx.fillStyle='#c8c0a8';ctx.beginPath();ctx.ellipse(0,0,14,8,0,0,7);ctx.fill();
+    ctx.fillStyle='#4a9b7a';ctx.fillRect(-4,-3,8,3);
+    ctx.fillStyle='rgba(200,192,168,.20)';ctx.beginPath();ctx.arc(0,0,26,0,7);ctx.fill();
+    ctx.restore();
+    // oxygen bar
+    ctx.fillStyle='rgba(255,255,255,.10)';ctx.fillRect(12,H-22,W-24,6);
+    ctx.fillStyle=G.o2<30?'#b4462f':'#4a9b7a';ctx.fillRect(12,H-22,(W-24)*Math.max(0,G.o2)/100,6);
+  }
+  function loop(now){var dt=Math.min(.05,(now-(G.last||now))/1000);G.last=now;step(dt);draw();requestAnimationFrame(loop);}
+  document.addEventListener('keydown',function(e){
+    if(e.key===' '){e.preventDefault();if(!G.running){var b=document.getElementById('go');if(b)b.click();}else ping();return;}
+    if(e.key==='ArrowLeft'||e.key==='a'||e.key==='A')G.keys.left=true;
+    if(e.key==='ArrowRight'||e.key==='d'||e.key==='D')G.keys.right=true;
+    if(e.key==='ArrowUp'||e.key==='w'||e.key==='W')G.keys.up=true;
+    if(e.key==='ArrowDown'||e.key==='s'||e.key==='S')G.keys.down=true;
+    if(e.key==='Enter'&&!G.running){var b2=document.getElementById('go');if(b2)b2.click();}
+  });
+  document.addEventListener('keyup',function(e){
+    if(e.key==='ArrowLeft'||e.key==='a'||e.key==='A')G.keys.left=false;
+    if(e.key==='ArrowRight'||e.key==='d'||e.key==='D')G.keys.right=false;
+    if(e.key==='ArrowUp'||e.key==='w'||e.key==='W')G.keys.up=false;
+    if(e.key==='ArrowDown'||e.key==='s'||e.key==='S')G.keys.down=false;
+  });
+  cv.addEventListener('pointerdown',function(){if(!G.running){var b=document.getElementById('go');if(b)b.click();}else ping();});
+  document.getElementById('go').onclick=reset;
+  requestAnimationFrame(loop);
+})();
+</script></body></html>
