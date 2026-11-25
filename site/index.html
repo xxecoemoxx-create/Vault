@@ -1,634 +1,339 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-comfort="off">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ENDLING | Solastalgia</title>
-    <!-- Cream mini moth favicon -->
-    <link rel="icon" href="https://ecoemo.store/assets/moth-favicon.png">
-    <style>
-        body {
-            background-color: #000000; /* Obsidian Black */
-            color: #C8C0A8; /* Bone Cream */
-            font-family: monospace;
-            text-align: center;
-            padding: 2rem;
-            margin: 0;
-        }
-        .player-container {
-            border: 1px solid #4A9B7A; /* Forest Green accent */
-            padding: 20px;
-            max-width: 600px;
-            margin: 0 auto;
-            background-color: #000000;
-        }
-        h2 {
-            font-family: serif;
-            letter-spacing: 2px;
-            margin-bottom: 5px;
-            color: #C8C0A8;
-        }
-        .tagline {
-            font-size: 0.8rem;
-            font-style: italic;
-            color: #4A9B7A;
-            margin-bottom: 20px;
-        }
-        #track-title {
-            font-weight: bold;
-            text-transform: uppercase;
-            border-bottom: 1px solid #333;
-            padding-bottom: 10px;
-        }
-        .dagger-btn {
-            background: transparent;
-            color: #C8C0A8;
-            border: 1px solid #C8C0A8;
-            padding: 10px 20px;
-            cursor: pointer;
-            font-family: serif;
-            text-transform: uppercase;
-            margin: 5px;
-            transition: all 0.2s ease;
-        }
-        .dagger-btn:hover {
-            color: #000000;
-            background-color: #4A9B7A;
-            border-color: #4A9B7A;
-        }
-        .lyrics-display {
-            margin-top: 20px;
-            white-space: pre-wrap;
-            font-size: 0.9rem;
-            text-align: left;
-            line-height: 1.4;
-            height: 400px;
-            overflow-y: auto;
-            padding: 15px;
-            border: 1px solid #333;
-            background: #050505;
-        }
-        /* Custom Scrollbar for lyrics */
-        .lyrics-display::-webkit-scrollbar { width: 8px; }
-        .lyrics-display::-webkit-scrollbar-track { background: #000; }
-        .lyrics-display::-webkit-scrollbar-thumb { background: #4A9B7A; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ENDLING — Solastalgia | Eco Emo</title>
+  <meta name="description" content="ENDLING — Solastalgia. Six post-hardcore movements for the last luna moth, three arcade builds, and one store that routes 15% of net proceeds to endangered species.">
+  <meta name="theme-color" content="#070709">
+  <meta property="og:title" content="ENDLING — Solastalgia">
+  <meta property="og:description" content="Grieve the earth. Save it anyway. Six movements, three arcade builds, 15% pledge.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="https://ecoemo.store/assets/moth-favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;700&family=Space+Mono:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/theme.css">
+  <script type="module" src="/assets/site.js"></script>
 </head>
 <body>
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="glow" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
 
-<div class="player-container">
-    <h2>ENDLING</h2>
-    <div class="tagline">grieve the earth. save it anyway.</div>
-    
-    <h3 id="track-title">Loading...</h3>
-    
-    <!-- Gothic Dagger Controls -->
-    <div>
-        <button class="dagger-btn" onclick="prevTrack()">&#x2020; Prev</button>
-        <button class="dagger-btn" onclick="playPause()">Play / Pause</button>
-        <button class="dagger-btn" onclick="nextTrack()">Next &#x2020;</button>
+  <header class="rail">
+    <a class="brand" href="/">ENDLING <em>&#x018E;E</em></a>
+    <nav aria-label="Primary">
+      <a href="#listen">Listen</a>
+      <a href="#tiers">Tiers</a>
+      <a href="#play">Arcade</a>
+      <a href="#pledge">Pledge</a>
+      <a class="shop" href="https://ecoemo.store/shop">Shop</a>
+    </nav>
+    <button class="comfort" id="comfort" type="button" aria-pressed="false">
+      <span class="dot" aria-hidden="true"></span><span class="label">Calm mode</span>
+    </button>
+  </header>
+
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="moth" aria-hidden="true">
+        <svg viewBox="0 0 400 400" focusable="false">
+          <defs>
+            <linearGradient id="wing" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#EFECE4" stop-opacity=".18"/>
+              <stop offset="1" stop-color="#4ADE80" stop-opacity=".06"/>
+            </linearGradient>
+          </defs>
+          <g fill="url(#wing)" stroke="#EFECE4" stroke-opacity=".38" stroke-width="1.4">
+            <path d="M196 178 C162 122 112 96 60 104 C40 152 74 192 122 206 C152 215 178 208 196 198 Z"/>
+            <path d="M204 178 C238 122 288 96 340 104 C360 152 326 192 278 206 C248 215 222 208 204 198 Z"/>
+            <path d="M194 216 C160 230 128 268 122 312 C120 340 126 360 138 372 C150 350 160 336 176 316 C190 298 196 260 194 216 Z"/>
+            <path d="M206 216 C240 230 272 268 278 312 C280 340 274 360 262 372 C250 350 240 336 224 316 C210 298 204 260 206 216 Z"/>
+          </g>
+          <g fill="none" stroke="#EFECE4" stroke-opacity=".45" stroke-width="1.6">
+            <ellipse cx="200" cy="214" rx="8.5" ry="58"/>
+            <circle cx="200" cy="150" r="11"/>
+            <path d="M194 145 C176 118 158 104 136 96"/>
+            <path d="M206 145 C224 118 242 104 264 96"/>
+            <path d="M188 141 L170 118 M184 137 L160 124"/>
+            <path d="M212 141 L230 118 M216 137 L240 124"/>
+          </g>
+          <g fill="#8B1E24" fill-opacity=".5">
+            <circle cx="106" cy="150" r="13"/>
+            <circle cx="294" cy="150" r="13"/>
+          </g>
+          <g fill="none" stroke="#4ADE80" stroke-opacity=".45" stroke-width="1">
+            <circle cx="106" cy="150" r="19"/>
+            <circle cx="294" cy="150" r="19"/>
+          </g>
+        </svg>
+      </div>
+
+      <p class="eyebrow">Eco Emo &middot; Solastalgia &middot; Six movements</p>
+      <h1 id="hero-title">ENDLING</h1>
+      <p class="tag">grieve the earth. save it anyway.</p>
+      <p class="lede">
+        A post-hardcore requiem for the last luna moth, the last vaquita, the last
+        old-growth grove &mdash; sung loud enough that the grief does something.
+      </p>
+      <div class="cta-row">
+        <a class="btn btn-solid" href="#listen">Hear the requiem</a>
+        <a class="btn btn-ghost" href="https://ecoemo.store/shop">Enter the store</a>
+      </div>
+      <ul class="hero-facts">
+        <li>6 movements</li>
+        <li>3 arcade builds</li>
+        <li>15% pledge</li>
+      </ul>
+    </section>
+
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker-track">
+        <span>LAST LUNA MOTH // STREETLIGHT<i>&#10022;</i></span>
+        <span>VAQUITA // 10 REMAIN<i>&#10022;</i></span>
+        <span>GHOST NETS // DEEP WATER<i>&#10022;</i></span>
+        <span>OLD GROWTH // 1,000 RINGS<i>&#10022;</i></span>
+        <span>ASH ON THE SOLSTICE // NEW<i>&#10022;</i></span>
+        <span>15% OF NET PROCEEDS &rarr; CONSERVATION<i>&#10022;</i></span>
+        <span>LAST LUNA MOTH // STREETLIGHT<i>&#10022;</i></span>
+        <span>VAQUITA // 10 REMAIN<i>&#10022;</i></span>
+        <span>GHOST NETS // DEEP WATER<i>&#10022;</i></span>
+        <span>OLD GROWTH // 1,000 RINGS<i>&#10022;</i></span>
+        <span>ASH ON THE SOLSTICE // NEW<i>&#10022;</i></span>
+        <span>15% OF NET PROCEEDS &rarr; CONSERVATION<i>&#10022;</i></span>
+      </div>
     </div>
 
-    <div class="lyrics-display" id="lyrics-box">
-        // Lyrics will load here...
+    <section class="band" id="tiers" aria-labelledby="tiers-title">
+      <span class="band-num" aria-hidden="true">01</span>
+      <div class="band-inner">
+        <div class="band-head reveal">
+          <span class="k">The shop, sorted by grief</span>
+          <h2 id="tiers-title">Three ways down the tree</h2>
+          <p class="band-lede">
+            Roots, trunk, canopy. Every piece belongs to one of them, so you can
+            start where the weight sits for you &mdash; decay, urgency, or regrowth.
+          </p>
+        </div>
+        <div class="rule" aria-hidden="true"></div>
+        <div class="grid-3">
+          <a class="tier reveal" href="https://ecoemo.store/shop?tier=roots">
+            <span class="tier-n">01</span>
+            <span class="tier-name">Roots</span>
+            <span class="tier-sub">Degradation</span>
+            <span class="tier-body">
+              Low-tuned riffs, soil and bedrock defence. Mycelium, bog, spore, rot.
+              Doom tempo, no apology.
+            </span>
+            <span class="tier-go">Enter <span>&rarr;</span></span>
+          </a>
+          <a class="tier reveal" href="https://ecoemo.store/shop?tier=trunk">
+            <span class="tier-n">02</span>
+            <span class="tier-name">Trunk</span>
+            <span class="tier-sub">Extinction</span>
+            <span class="tier-body">
+              Frontline species preservation. Tally walls, reliquaries, the last
+              known range. The tier where a number stops being a population.
+            </span>
+            <span class="tier-go">Enter <span>&rarr;</span></span>
+          </a>
+          <a class="tier reveal" href="https://ecoemo.store/shop?tier=canopy">
+            <span class="tier-n">03</span>
+            <span class="tier-name">Canopy</span>
+            <span class="tier-sub">Reclamation</span>
+            <span class="tier-body">
+              Soaring hooks and rewilding. Roots that climb instead of drag down.
+              The tier that argues the ending is not written yet.
+            </span>
+            <span class="tier-go">Enter <span>&rarr;</span></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="listen" aria-labelledby="listen-title">
+      <span class="band-num" aria-hidden="true">02</span>
+      <div class="band-inner">
+        <div class="band-head reveal">
+          <span class="k">The listening room</span>
+          <h2 id="listen-title">Solastalgia, read in full</h2>
+          <p class="band-lede">
+            Six movements. The masters are still in the kiln &mdash; until they
+            land, the lyrics are the recording. Pick a movement; the room
+            remembers where you stopped.
+          </p>
+        </div>
+        <div class="rule" aria-hidden="true"></div>
+        <div class="player reveal">
+          <div class="player-main">
+            <p class="player-k">Now reading</p>
+            <h3 id="track-title" aria-live="polite">1. Requiem for the Light</h3>
+            <div class="controls">
+              <button type="button" data-act="prev" aria-label="Previous movement">&#x2020; Prev</button>
+              <button type="button" data-act="toggle" class="play">Play / Pause</button>
+              <button type="button" data-act="next" aria-label="Next movement">Next &#x2020;</button>
+            </div>
+            <p class="player-status" id="player-status" role="status">
+              Masters still in the kiln. Read along below.
+            </p>
+            <div class="lyrics" id="lyrics-box" tabindex="0" aria-label="Lyrics for the selected movement">
+              Loading the first movement&hellip;
+            </div>
+            <noscript>
+              <p class="player-status">The listening room needs JavaScript. Every
+              movement&rsquo;s lyrics also ship as a printed insert with the merch.</p>
+            </noscript>
+          </div>
+          <ol class="tracklist" id="tracklist" aria-label="Movements"></ol>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="play" aria-labelledby="play-title">
+      <span class="band-num" aria-hidden="true">03</span>
+      <div class="band-inner">
+        <div class="band-head reveal">
+          <span class="k">Eco Emo arcade</span>
+          <h2 id="play-title">Three builds, one per tier</h2>
+          <p class="band-lede">
+            No install, no accounts, no leaderboards to feed. Keyboard or thumb,
+            in the browser, in under a minute.
+          </p>
+        </div>
+        <div class="rule" aria-hidden="true"></div>
+        <div class="grid-3">
+          <a class="tier reveal" href="https://ecoemo.store/games/reclamation">
+            <span class="tier-n">Tier I &middot; Reclamation</span>
+            <span class="tier-name">Plant Your Future</span>
+            <span class="tier-sub">&larr; &rarr; or A / D &middot; tap left / right</span>
+            <span class="tier-body">
+              Steer a root network down through toxic soil. Drink every water
+              pocket, dodge the slag, keep the root alive.
+            </span>
+            <span class="tier-go">Play <span>&rarr;</span></span>
+          </a>
+          <a class="tier reveal" href="https://ecoemo.store/games/degradation">
+            <span class="tier-n">Tier II &middot; Degradation</span>
+            <span class="tier-name">Endling&rsquo;s Escape</span>
+            <span class="tier-sub">Space / &uarr; to jump &middot; tap to jump</span>
+            <span class="tier-body">
+              Momentum platformer. The ground is already gone behind you. Jump
+              the spikes, bank the embers, outrun the ash.
+            </span>
+            <span class="tier-go">Play <span>&rarr;</span></span>
+          </a>
+          <a class="tier reveal" href="https://ecoemo.store/games/extinction">
+            <span class="tier-n">Tier III &middot; Extinction</span>
+            <span class="tier-name">Vaquita Deep</span>
+            <span class="tier-sub">WASD / arrows &middot; Space to ping</span>
+            <span class="tier-body">
+              Sonar navigation in black water. Ping to find the last pods, avoid
+              the gillnets, spend oxygen like it&rsquo;s the last of it.
+            </span>
+            <span class="tier-go">Play <span>&rarr;</span></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="doors" aria-labelledby="doors-title">
+      <span class="band-num" aria-hidden="true">04</span>
+      <div class="band-inner">
+        <div class="band-head reveal">
+          <span class="k">Come as you are</span>
+          <h2 id="doors-title">Different griefs, one forest</h2>
+          <p class="band-lede">
+            You don&rsquo;t have to arrive as a fan, a shopper, or an activist.
+            Start with whichever door is closest.
+          </p>
+        </div>
+        <div class="rule" aria-hidden="true"></div>
+        <div class="grid-3">
+          <a class="door reveal" href="#listen">
+            <span class="glyph" aria-hidden="true">&#x2020;</span>
+            <h3>Here for the music</h3>
+            <p>Read the six movements end to end, with the lyrics on the page
+              instead of behind a login.</p>
+            <span class="go">Open the listening room &rarr;</span>
+          </a>
+          <a class="door reveal" href="https://ecoemo.store/shop">
+            <span class="glyph" aria-hidden="true">&#x2692;</span>
+            <h3>Here for the goods</h3>
+            <p>One design per vanishing species, printed on demand. Prices,
+              shipping and returns are on every product page.</p>
+            <span class="go">Browse the shop &rarr;</span>
+          </a>
+          <a class="door reveal" href="https://ecoemo.store/conservation">
+            <span class="glyph" aria-hidden="true">&#x273F;</span>
+            <h3>Here for the cause</h3>
+            <p>The ledger is public: what was pledged, what was disbursed, and
+              which species the money reached.</p>
+            <span class="go">Read the ledger &rarr;</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="pledge" aria-labelledby="pledge-title">
+      <span class="band-num" aria-hidden="true">05</span>
+      <div class="band-inner">
+        <div class="band-head reveal">
+          <span class="k">The pledge</span>
+          <h2 id="pledge-title">The math, not the mood</h2>
+        </div>
+        <div class="rule" aria-hidden="true"></div>
+        <div class="pledge reveal">
+          <div class="big">15%</div>
+          <div>
+            <h3>of net proceeds, every order</h3>
+            <p>
+              Fifteen percent of net proceeds routes to the conservation ledger
+              and out to the organisations working on the species this store is
+              named for. No receipt, no claim &mdash; the ledger is published.
+            </p>
+            <ul class="receipts">
+              <li>One design per vanishing species</li>
+              <li>Disbursements published at /conservation</li>
+              <li>Print-on-demand, so nothing is printed to sit in a warehouse</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="foot-grid">
+      <div>
+        <p class="foot-brand">ENDLING <em>&#x018E;E</em></p>
+        <p class="foot-note">
+          Eco Emo is a small label and shop for people who grieve the earth and
+          still want to do something about it.
+        </p>
+      </div>
+      <div>
+        <h4>Enter</h4>
+        <ul>
+          <li><a href="https://ecoemo.store/shop">Shop</a></li>
+          <li><a href="https://ecoemo.store/games">Arcade</a></li>
+          <li><a href="https://ecoemo.store/conservation">Conservation</a></li>
+          <li><a href="https://ecoemo.store/worx">WORX</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Reach</h4>
+        <ul>
+          <li><a href="mailto:den@ecoemo.org">den@ecoemo.org</a></li>
+          <li><a href="mailto:roots@ecoemo.org">roots@ecoemo.org</a></li>
+          <li><a href="https://ecoemo.store/legal">Legal &amp; privacy</a></li>
+        </ul>
+      </div>
     </div>
-</div>
-
-<script>
-    const endlingTracks = [
-        {
-            title: "1. Requiem for the Light",
-            audioUrl: "", // Add MP3 link here when generated
-            lyrics: `[Intro]
-(Soft fingerpicked acoustic guitar with faint ambient night noise)
-(Whispered, intimate)
-Seven days in the dark...
-No mouth to feed, no time to waste...
-Just searching for the moon.
-
-[Verse 1]
-Pale emerald wings in the midnight mist
-Born from the bark that the cold fog kissed
-You had seven short nights to find your home
-To dance in the canopy all alone
-But the horizon burned with a synthetic glow
-A blinding trap in the clearing below
-You turned from the stars to the tungsten flame
-Forgetting the woods that called your name.
-
-[Pre-Chorus]
-(Piano enters, acoustic guitar turns aggressive)
-Beating against the glass, tearing your silver dust
-Drawn to a hollow spark, bound by a fatal trust
-There is no nectar here, there is no sacred mate
-Only an iron cage, sealing an ancient fate.
-
-[Chorus]
-(Full band explodes: heavy post-hardcore guitars, crushing bass, driving drums)
-Fly into the fire, bleed upon the street!
-The last luna moth at the artificial heat!
-We built a brighter world to blind the dark outside,
-And watched the quiet light where the wild things died!
-Fly away, fly away... before the dawn turns grey!
-
-[Verse 2]
-(Acoustic guitar returns with heavy bass underneath)
-Your delicate tails are ragged and torn
-Fallen on pavement before the morn
-No eggs in the oak trees, no larvae in spring
-Just the quiet remains of a forgotten wing
-We trade the dark sky for neon and glass
-Unaware of the shadows that silently pass.
-
-[Pre-Chorus]
-(Distorted guitar swells with piano)
-Beating against the glass, tearing your silver dust
-Drawn to a hollow spark, bound by a fatal trust
-There is no nectar here, there is no sacred mate
-Only an iron cage, sealing an ancient fate.
-
-[Chorus]
-(Full band: explosive, impassioned)
-Fly into the fire, bleed upon the street!
-The last luna moth at the artificial heat!
-We built a brighter world to blind the dark outside,
-And watched the quiet light where the wild things died!
-
-[Bridge]
-(Tempo slows, heavy atmospheric sludge riff, strained raspy vocals)
-(Heavy distorted bass and bowed cello)
-No mouth to scream...
-No voice to cry...
-You came to love the light...
-That taught you how to die!
-
-(Screamed defiance)
-WE KILLED THE NIGHT! WE KILLED THE NIGHT!
-
-[Guitar Solo / Atmospheric Breakdown]
-(Soaring, weeping electric guitar melody over crashing cymbals and acoustic rhythm)
-
-[Chorus]
-(Maximum intensity, raw emotional vocals)
-Fly into the fire, bleed upon the street!
-The last luna moth at the artificial heat!
-We built a brighter world to blind the dark outside,
-And watched the quiet light where the wild things died!
-
-[Outro]
-(Drums fade out, soft acoustic guitar and single piano notes)
-(Whispered)
-The streetlight flickers...
-The woods grow cold...
-The last green light...
-Fades into the mold.
-(Fades out with night ambient wind)`
-        },
-        {
-            title: "2. Iron and Ivy",
-            audioUrl: "", 
-            lyrics: `[Intro]
-(Industrial wind, echoing metal drops, slow acoustic guitar arpeggio)
-(Spoken low)
-You built your towers to outlast the sun...
-But the soil was waiting all along.
-
-[Verse 1]
-Corroded smokestacks reaching for the clouds
-Empty assembly halls wrapped in dusty shrouds
-The gears have frozen and the turbines stand cold
-While quiet green roots break through iron and mold
-A single acorn splits the factory floor
-Where heavy boots walked, men walk no more
-Ferns climb the girders, moss covers the rust
-Your proudest machines are returning to dust.
-
-[Pre-Chorus]
-(Driving snare drum and heavy acoustic strumming)
-You carved out the valley, you paved over stone
-You thought that you conquered the wild alone
-But time is a river that swallows your pride
-And nature reclaims what you tried to divide.
-
-[Chorus]
-(Explosive post-hardcore wall of sound, heavy guitars and crashing cymbals)
-Tear down the iron! Let the ivy grow!
-Break through the concrete in the earth below!
-No crown lasts forever, no empire survives
-When the forest awakes and the green world revives!
-Nature reclaims everything!
-
-[Verse 2]
-(Acoustic guitar with heavy bass pulse and melodic electric swells)
-Wild brambles weave through the broken control room
-Wildflowers bloom in the industrial gloom
-Barn owls nest in the steel rafters high
-Watching the night sky as centuries fly
-No pollution in the water, no smoke in the breeze
-Just the rustle of leaves and the song of the trees.
-
-[Pre-Chorus]
-(Building percussion and distorted rhythm)
-You carved out the valley, you paved over stone
-You thought that you conquered the wild alone
-But time is a river that swallows your pride
-And nature reclaims what you tried to divide.
-
-[Chorus]
-(Explosive energy, passionate melodic vocals)
-Tear down the iron! Let the ivy grow!
-Break through the concrete in the earth below!
-No crown lasts forever, no empire survives
-When the forest awakes and the green world revives!
-
-[Bridge]
-(Rhythm drops to heavy slow sludge beat, thick distorted bass)
-(Guttural, intense chant)
-Stone by stone! Vine by vine!
-You ran out of breath, you ran out of time!
-Root in the foundation! Bloom in the rust!
-Every man-made kingdom crumbles into dust!
-
-(Shouted)
-CRUMBLES INTO DUST!
-
-[Guitar Solo]
-(Soaring post-hardcore melodic guitar solo, dual harmony leads over heavy rhythm)
-
-[Chorus]
-(Maximum explosive volume)
-Tear down the iron! Let the ivy grow!
-Break through the concrete in the earth below!
-No crown lasts forever, no empire survives
-When the forest awakes and the green world revives!
-
-[Outro]
-(Music slows, acoustic guitar and rustling forest leaves)
-(Soft melodic singing)
-The iron is fading...
-The ivy is free...
-Where concrete once buried...
-The roots of the tree.
-(Final deep bass acoustic ring out)`
-        },
-        {
-            title: "3. The Endling's Solitude",
-            audioUrl: "", 
-            lyrics: `[Intro]
-(Bowed cello notes, weeping acoustic guitar melody)
-(Soft spoken)
-An endling does not know it is the last...
-It only knows... no one ever answers.
-
-[Verse 1]
-I stand at the wire of a wooden cage
-Or the edge of a forest robbed of its age
-I call out my name in the tongue of my kin
-And wait for the echo to linger within
-One million summers of bloodline and song
-Carried in bones where I used to belong
-Now my voice falls flat on the canopy wall
-And nobody hears when I stumble and fall.
-
-[Verse 2]
-(Acoustic guitar grows darker, subtle bass notes added)
-I remember the trails where thousands once ran
-Before the cold wire and weapons of man
-My mother’s dark eyes, the scent of the rain
-Now only memories keeping me sane
-I am the monument, I am the grave
-The last living creature no science can save.
-
-[Chorus]
-(Heavy post-hardcore riffing, slow thunderous drums, aching vocal delivery)
-Is anybody listening across the open wild?
-I am the last forgotten, nature’s lonely child!
-Ten thousand generations vanish in my breath,
-A solitary witness to an artificial death!
-I call into the dark... and the dark stays still!
-
-[Verse 3]
-(Acoustic guitar picking returned, mournful tone)
-My eyes grow heavy, my heart slows its beat
-The soil beneath me feels cold and complete
-No mate in the valley, no calf in the spring
-Just the silence that waits for the sorrow I bring
-When I close my eyes at the end of the day
-An entire world quietly fades away.
-
-[Bridge]
-(Tempo slows to heavy atmospheric sludge tempo, deep fuzz bass, raspy strained vocals)
-(Building emotion)
-No next spring... No second chance...
-The final step of an ancient dance...
-You took my forest, you took my name,
-And wrote down my life in a book of shame!
-
-(Screamed with agonizing passion)
-WHO OWNS THE SILENCE WHEN THE LAST ONE DIES?!
-WHO LOOKS AWAY WHEN THE BLOODLINE CRIES?!
-
-[Guitar Solo]
-(Devastating, melancholic electric guitar solo with long lingering notes and bowed string accompaniment)
-
-[Chorus]
-(Full explosive intensity, layered screaming and clean emotional vocals)
-Is anybody listening across the open wild?
-I am the last forgotten, nature’s lonely child!
-Ten thousand generations vanish in my breath,
-A solitary witness to an artificial death!
-
-[Outro]
-(All heavy instruments cut, leaving only bowed cello and fingerpicked acoustic guitar)
-(Breathy, fragile singing)
-The call goes out...
-Across the hill...
-No answer comes...
-The woods stay still.
-(Single fading acoustic chord)`
-        },
-        {
-            title: "4. Drowning in Ghost Threads",
-            audioUrl: "", 
-            lyrics: `[Intro]
-(Deep sub-bass swell, ambient hydrophone ocean textures, reverbed acoustic guitar)
-(Spoken quietly)
-Three thousand miles of open blue...
-Trapped in a web we never knew.
-
-[Verse 1]
-Beneath the surface where the blue turns black
-An ancient voyager will never make it back
-Gliding through currents five thousand years old
-Where sunlight pales and the abyss grows cold
-But the water is heavy with unnatural threads
-Monofilament traps where the sea turtle bleeds
-Floating ghost nets drifting without an end
-Tangling the limbs of an ocean’s old friend.
-
-[Pre-Chorus]
-(Acoustic strumming intensifies with pulsing bass)
-A synthetic tide, a poisonous bloom
-Turning the gulf into an underwater tomb
-Particles of polyethylene in every breath
-We fed the deep waters a slow, plastic death.
-
-[Chorus]
-(Heavy post-hardcore guitar wall, driving double-kick drums)
-Drowning in ghost threads! Choked by the tide!
-Swallowing the poison where the deep sea died!
-We wrapped the ocean in a polyester shroud,
-And cast our rubbish where the waves roared loud!
-Grieve the blue earth... bleed for the sea!
-
-[Verse 2]
-(Melodic electric guitar swells over tight rhythm section)
-Plankton and micro-shards tangled in the mesh
-Nylon cutting deep into salt-soaked flesh
-Albatross chicks on a remote coral strand
-Stomach full of bottle caps from a distant land
-No tide can wash it clean, no storm can tear it down
-In a sea of manufactured trash we watch the wild ocean drown.
-
-[Pre-Chorus]
-(Building tension)
-A synthetic tide, a poisonous bloom
-Turning the gulf into an underwater tomb
-Particles of polyethylene in every breath
-We fed the deep waters a slow, plastic death.
-
-[Chorus]
-(Explosive post-hardcore chorus, soaring vocals)
-Drowning in ghost threads! Choked by the tide!
-Swallowing the poison where the deep sea died!
-We wrapped the ocean in a polyester shroud,
-And cast our rubbish where the waves roared loud!
-
-[Bridge]
-(Tempo slows, crushing atmospheric sludge riff, low guttural growls and emotional screams)
-Five hundred years in the salt and light!
-Plastic doesn't rot, plastic doesn't die!
-It lingers in the water column, blinding every eye!
-
-(Fierce scream)
-WE ARE POISONING THE CRADLE OF LIFE!
-WE ARE POISONING THE TIDE!
-
-[Guitar Solo]
-(Liquid, delay-heavy atmospheric guitar solo soaring above heavy bass undertones)
-
-[Chorus]
-(Maximum volume and emotional drive)
-Drowning in ghost threads! Choked by the tide!
-Swallowing the poison where the deep sea died!
-We wrapped the ocean in a polyester shroud,
-And cast our rubbish where the waves roared loud!
-
-[Outro]
-(Ocean waves fading back in, soft acoustic guitar picking)
-(Muffled, submerged vocal)
-The tide rolls in...
-The ghost nets sway...
-And the deep blue heart...
-rots away.
-(Fades out with ocean waves)`
-        },
-        {
-            title: "5. Echoes of the Ancient Giants",
-            audioUrl: "", 
-            lyrics: `[Intro]
-(Deep timber percussion, low resonant acoustic guitar, wind through tall trees)
-(Spoken steadily)
-One thousand years to grow a canopy...
-Twenty minutes to cut it down.
-
-[Verse 1]
-Roots intertwined in the dark primal peat
-Holding the mountain beneath ancient feet
-Redwoods and cedars eight hundred years tall
-Standing in majesty, watching over all
-Moss-draped cathedrals where moss covers stone
-Sovereign sanctuaries the world called its own
-Then came the engines, the gas and the steel
-The bite of the saw blade, the crushing iron wheel.
-
-[Verse 2]
-(Acoustic strumming grows louder, low bass rumble)
-The first undercut bleeds golden amber sap
-A thousand-year giant falls into the gap
-The forest floor trembles, the canopy tears
-A century’s silence vanishes in airs
-Birds lose their roosts, lichens turn to dust
-A holy sanctuary sacrificed to human lust.
-
-[Chorus]
-(Crushing sludge post-hardcore riff, thundering timber drums)
-Timber falls! The forest groans!
-Chainsaws tearing through ancient bones!
-You sold the grove for paper and pine,
-And murdered a temple of sacred design!
-Listen to the echo of the falling giant!
-
-[Verse 3]
-(Acoustic folk picking with heavy electric drone)
-Now mudslides wash down the desolate hill
-Where wild trout swam in the shaded clear rill
-The sun bakes the soil where shadows once slept
-And the spirit of the old-growth quietly wept
-You can plant new saplings in orderly rows
-But a tree farm is dead where a wild forest grows.
-
-[Bridge]
-(Tempo slows to heavy sludge breakdown, heavy fuzz guitars, raw screamed vocals)
-(Rhythmic timber beats)
-A thousand rings of winter! A thousand rings of spring!
-You cut down the kingdom! You dethroned the king!
-No nursery can replace what took a millenia to build!
-Look at the mud where the wilderness was killed!
-
-(Screamed)
-TREES ARE NOT CROP! WOOD IS NOT OARS!
-THIS ANCIENT SOIL WAS NEVER YOURS!
-
-[Guitar Solo]
-(Heavy, slow, weeping sludge guitar solo with deep bend notes and feedback)
-
-[Chorus]
-(Full explosive power, raw emotional vocals)
-Timber falls! The forest groans!
-Chainsaws tearing through ancient bones!
-You sold the grove for paper and pine,
-And murdered a temple of sacred design!
-
-[Outro]
-(Electric fuzz fades into soft acoustic guitar strum and solitary wood block sound)
-(Softly)
-The stump remains...
-Rings of time...
-A tombstone left...
-In the timber line.
-(Final deep bass decay)`
-        },
-        {
-            title: "6. Ash on the Solstice",
-            audioUrl: "", 
-            lyrics: `[Intro]
-(Soft rain soundscape, gentle piano, warm melancholic acoustic guitar)
-(Whispered emotionally)
-Summer comes with smoke now...
-The winter comes without snow...
-Where do we put this grief... when nowhere feels like home?
-
-[Verse 1]
-I watch the orange haze cover the morning sky
-The riverbed is dry where the salmon used to lie
-My heart aches heavy with a burden I can’t name
-Watching the places of my childhood turn to flame
-They call it solastalgia, this sickness in the chest
-Watching the home you love decay from east to west
-We mourn for what was lost, we cry for what will fall
-When a warming world demands the price from all.
-
-[Verse 2]
-(Piano joins acoustic guitar, bass enters)
-The glaciers bleed white tears into the rising bay
-The migration maps are broken, the swallows lost their way
-It’s easy to freeze up, to curl into the dark
-To accept the extinction and extinguish every spark
-But sorrow without anger is a surrender in disguise
-And I refuse to close my eyes.
-
-[Pre-Chorus]
-(Drum swell, electric guitars begin to feedback)
-Hold the grief in your hands like a burning coal!
-Let the tears water the garden in your soul!
-We cannot undo what the greedy have slain,
-But we will stand in the storm and honor the pain!
-
-[Chorus]
-(Explosive post-hardcore release, heavy guitars, driving rhythm)
-Ash on the solstice! Smoke in the air!
-Grieve the earth... save it anyway!
-Do not bow your head to the corporate despair!
-Fight for the sapling in the ash of the pine,
-Defend every acre of this sacred line!
-Grieve the earth... save it anyway!
-
-[Verse 3]
-(Dynamic drop: acoustic guitar and pulsing bass, passionate vocal)
-There is courage in mourning what you love enough to save
-There is dignity in standing beside a forest grave
-Every tree we plant today is an act of war
-Against the hollow suits who only ask for more
-We carry the sorrow, but we carry the flame
-And we whisper to the wilderness its ancient name.
-
-[Bridge]
-(Tempo slows, heavy atmospheric sludge beat, intense emotional vocal delivery)
-(Strained, raw vocals)
-I feel it all! The melting ice! The dying reef!
-I won't numb the pain! I won't bury my grief!
-Let it burn in my veins like a forest fire!
-Let it forge a weapon out of pure desire!
-
-(Screamed with fierce conviction)
-WE WILL NOT SURRENDER TO THE ASH!
-WE WILL NOT SURRENDER TO THE ASH!
-
-[Guitar Solo]
-(Triumphant, emotional post-hardcore guitar solo blending weeping bends with soaring melodic lines)
-
-[Chorus]
-(Maximum intensity, explosive band dynamics)
-Ash on the solstice! Smoke in the air!
-Grieve the earth... save it anyway!
-Do not bow your head to the corporate despair!
-Fight for the sapling in the ash of the pine,
-Defend every acre of this sacred line!
-
-[Outro]
-(Instruments settle down, leaving clean piano and rain soundscape)
-(Soft, calm, resolute singing)
-The ash will settle...
-The rain will fall...
-A green sprout rises...
-Through it all.
-
-(Gently spoken)
-Grieve the earth. Save it anyway.
-(Final soft piano chord fading out)`
-        }
-    ];
-
-    let currentTrackIndex = 0;
-
-    function loadTrack(index) {
-        document.getElementById('track-title').innerText = endlingTracks[index].title;
-        document.getElementById('lyrics-box').innerText = endlingTracks[index].lyrics;
-        // Audio object routing for playPause() will link to endlingTracks[index].audioUrl
-    }
-
-    function prevTrack() {
-        if (currentTrackIndex > 0) {
-            currentTrackIndex--;
-            loadTrack(currentTrackIndex);
-        }
-    }
-
-    function nextTrack() {
-        if (currentTrackIndex < endlingTracks.length - 1) {
-            currentTrackIndex++;
-            loadTrack(currentTrackIndex);
-        }
-    }
-
-    function playPause() {
-        alert("Audio rendering pending. Generate MP3s in Suno via base44.app/functions/voiceRecorder and paste URLs into the code.");
-    }
-
-    // Initialize first track
-    loadTrack(currentTrackIndex);
-</script>
-
+    <div class="foot-legal">
+      <span>&copy; <span id="year">2026</span> Eco Emo &middot; Grieve the earth. Save it anyway.</span>
+      <span>Calm mode is remembered on this device.</span>
+    </div>
+  </footer>
 </body>
 </html>

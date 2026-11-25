@@ -1,0 +1,18 @@
+# Deploy: npx wrangler deploy -c workers/wrangler.cx.toml
+name = "ecoemo-cx-agent"
+main = "cx-agent.js"
+compatibility_date = "2026-11-13"
+workers_dev = true
+
+[vars]
+CX_TARGET_URL = "https://ecoemo.store/"
+CX_MIN_SCORE = "85"
+
+[triggers]
+crons = ["0 13 * * 1"]
+
+# Optional but recommended: durable visitor pulse + the last report survive
+# restarts. Create the namespace, then uncomment and paste the id.
+# [[kv_namespaces]]
+# binding = "CX_KV"
+# id = "REPLACE_WITH_NAMESPACE_ID"
