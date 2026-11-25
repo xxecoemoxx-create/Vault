@@ -4,6 +4,7 @@ Coreplayer
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Endling Core Vault</title>
     <!-- Cream mini moth favicon -->
     <link rel="icon" href="https://ecoemo.store/assets/moth-favicon.png">
@@ -109,6 +110,7 @@ Coreplayer
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ENDLING | Solastalgia</title>
     <!-- Cream mini moth favicon -->
@@ -744,6 +746,7 @@ Grieve the earth. Save it anyway.
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ENDLING | Solastalgia</title>
     <!-- Cream mini moth favicon -->
     <link rel="icon" href="https://ecoemo.store/assets/moth-favicon.png">
@@ -1377,6 +1380,7 @@ Grieve the earth. Save it anyway.
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Endling Core Vault</title>
     <!-- Cream mini moth favicon -->
     <link rel="icon" href="https://ecoemo.store/assets/moth-favicon.png">
@@ -1479,3 +1483,977 @@ Grieve the earth. Save it anyway.
 </body>
 </html>
 
+
+<!-- ============================================================
+     AGENCY DEN — workers, agents, skills and files.
+     Self-contained page: opens over the vault from the launcher.
+     State lives in this browser's localStorage.
+     ============================================================ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agency Den</title>
+<style>
+    :root {
+        --ad-ink: #0b0c10;
+        --ad-panel: #0f1114;
+        --ad-panel-2: #0d0f12;
+        --ad-cream: #e8e5d7;
+        --ad-bone: #c8c0a8;
+        --ad-moss: #4a9b7a;
+        --ad-moss-bright: #6fd0a8;
+        --ad-line: #23262b;
+        --ad-line-2: #2f3338;
+        --ad-muted: #7f8b85;
+        --ad-danger: #e09393;
+    }
+
+    #ad-launcher {
+        position: fixed;
+        right: 18px;
+        bottom: 18px;
+        z-index: 2147483000;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 18px;
+        border: 1px solid var(--ad-moss);
+        background: rgba(11, 12, 16, 0.96);
+        color: var(--ad-cream);
+        font-family: Georgia, 'Times New Roman', serif;
+        font-size: 12px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        cursor: pointer;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.65);
+        transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+    }
+    #ad-launcher:hover { border-color: var(--ad-moss-bright); color: #ffffff; background: #11161a; }
+    #ad-launcher:focus-visible { outline: 2px solid var(--ad-moss-bright); outline-offset: 3px; }
+
+    #agency-den {
+        position: fixed;
+        inset: 0;
+        z-index: 2147483001;
+        display: none;
+        overflow-y: auto;
+        text-align: left;
+        color: var(--ad-cream);
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+        color-scheme: dark;
+        background:
+            radial-gradient(1100px 560px at 12% -8%, rgba(74, 155, 122, 0.13), transparent 62%),
+            radial-gradient(900px 520px at 92% 108%, rgba(74, 155, 122, 0.08), transparent 60%),
+            var(--ad-ink);
+        -webkit-font-smoothing: antialiased;
+    }
+    #agency-den.ad-open { display: block; }
+    #agency-den *, #ad-launcher * { box-sizing: border-box; }
+
+    .ad-shell {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 26px clamp(14px, 4vw, 40px) 80px;
+    }
+    .ad-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+        padding-bottom: 18px;
+        border-bottom: 1px solid var(--ad-line);
+    }
+    .ad-brand { display: flex; align-items: center; gap: 14px; }
+    .ad-sigil {
+        width: 46px;
+        height: 46px;
+        flex: none;
+        display: grid;
+        place-items: center;
+        border: 1px solid var(--ad-moss);
+        background: rgba(74, 155, 122, 0.07);
+        color: var(--ad-moss-bright);
+        font-family: Georgia, 'Times New Roman', serif;
+        font-size: 24px;
+        line-height: 1;
+    }
+    .ad-title {
+        margin: 0;
+        font-family: Georgia, 'Times New Roman', serif;
+        font-size: clamp(22px, 3.2vw, 32px);
+        font-weight: normal;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        color: var(--ad-cream);
+    }
+    .ad-sub {
+        margin: 5px 0 0;
+        font-size: 10px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--ad-muted);
+    }
+
+    .ad-stats {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+        margin: 20px 0;
+    }
+    .ad-stat { border: 1px solid var(--ad-line); background: var(--ad-panel); padding: 12px 14px; }
+    .ad-stat b {
+        display: block;
+        font-family: Georgia, 'Times New Roman', serif;
+        font-weight: normal;
+        font-size: 22px;
+        line-height: 1.1;
+        color: var(--ad-moss-bright);
+    }
+    .ad-stat span {
+        display: block;
+        margin-top: 4px;
+        font-size: 9px;
+        letter-spacing: 1.6px;
+        text-transform: uppercase;
+        color: var(--ad-muted);
+    }
+
+    .ad-tabs {
+        display: flex;
+        gap: 0;
+        border-bottom: 1px solid var(--ad-line);
+        margin-bottom: 22px;
+        overflow-x: auto;
+    }
+    .ad-tab {
+        appearance: none;
+        border: 0;
+        border-bottom: 2px solid transparent;
+        background: transparent;
+        color: var(--ad-muted);
+        font-family: inherit;
+        font-size: 11px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        padding: 12px 18px;
+        cursor: pointer;
+        white-space: nowrap;
+    }
+    .ad-tab:hover { color: var(--ad-cream); }
+    .ad-tab[aria-selected="true"] { color: var(--ad-moss-bright); border-bottom-color: var(--ad-moss); }
+    .ad-tab:focus-visible { outline: 1px solid var(--ad-moss); outline-offset: -3px; }
+
+    .ad-panel {
+        border: 1px solid var(--ad-line);
+        background: var(--ad-panel);
+        padding: 16px;
+    }
+    .ad-panel h3 {
+        margin: 0 0 12px;
+        font-family: Georgia, 'Times New Roman', serif;
+        font-size: 14px;
+        font-weight: normal;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--ad-bone);
+    }
+    .ad-register { margin-bottom: 18px; }
+
+    .ad-field { margin-bottom: 10px; }
+    .ad-field label {
+        display: block;
+        margin-bottom: 5px;
+        font-size: 9px;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: var(--ad-muted);
+    }
+    .ad-two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    @media (max-width: 640px) { .ad-two { grid-template-columns: 1fr; } }
+
+    .ad-input, .ad-select, .ad-textarea {
+        width: 100%;
+        border: 1px solid var(--ad-line-2);
+        border-radius: 0;
+        background: #0a0c0e;
+        color: var(--ad-cream);
+        font-family: inherit;
+        font-size: 12px;
+        line-height: 1.5;
+        padding: 8px 10px;
+    }
+    .ad-textarea { resize: vertical; min-height: 74px; }
+    .ad-input:focus, .ad-select:focus, .ad-textarea:focus {
+        outline: none;
+        border-color: var(--ad-moss);
+        box-shadow: 0 0 0 1px rgba(74, 155, 122, 0.35);
+    }
+    .ad-input::placeholder, .ad-textarea::placeholder { color: #5c636a; }
+    .ad-rule { border: 0; border-top: 1px solid var(--ad-line); margin: 16px 0; }
+
+    .ad-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        appearance: none;
+        border: 1px solid var(--ad-moss);
+        background: transparent;
+        color: var(--ad-moss-bright);
+        font-family: Georgia, 'Times New Roman', serif;
+        font-size: 11px;
+        letter-spacing: 1.6px;
+        text-transform: uppercase;
+        text-decoration: none;
+        padding: 8px 12px;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+    }
+    .ad-btn:hover { background: rgba(74, 155, 122, 0.15); color: #d9f5e8; }
+    .ad-btn:focus-visible { outline: 2px solid var(--ad-moss-bright); outline-offset: 2px; }
+    .ad-btn:disabled { opacity: 0.38; cursor: not-allowed; }
+    .ad-btn.ad-ghost { border-color: var(--ad-line-2); color: var(--ad-bone); }
+    .ad-btn.ad-ghost:hover { border-color: var(--ad-bone); background: rgba(232, 229, 215, 0.06); }
+    .ad-btn.ad-danger { border-color: #4a2b2b; color: var(--ad-danger); }
+    .ad-btn.ad-danger:hover { background: rgba(224, 147, 147, 0.12); border-color: #7a4040; }
+
+    .ad-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+    .ad-grid .ad-empty { grid-column: 1 / -1; }
+    .ad-card {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        border: 1px solid var(--ad-line);
+        background: linear-gradient(180deg, #101216, var(--ad-panel-2));
+        padding: 16px;
+    }
+    .ad-card.ad-off { opacity: 0.62; }
+    .ad-card-head { display: flex; align-items: center; gap: 10px; }
+    .ad-avatar {
+        width: 38px;
+        height: 38px;
+        flex: none;
+        display: grid;
+        place-items: center;
+        border: 1px solid var(--ad-line-2);
+        background: #0a0c0e;
+        color: var(--ad-moss);
+        font-family: Georgia, 'Times New Roman', serif;
+        font-size: 17px;
+        text-transform: uppercase;
+    }
+    .ad-name-wrap { min-width: 0; }
+    .ad-name {
+        margin: 0;
+        font-family: Georgia, 'Times New Roman', serif;
+        font-size: 16px;
+        font-weight: normal;
+        letter-spacing: 1px;
+        color: var(--ad-cream);
+        overflow-wrap: anywhere;
+    }
+    .ad-role {
+        margin-top: 2px;
+        font-size: 9px;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: var(--ad-muted);
+    }
+    .ad-switch {
+        position: relative;
+        flex: none;
+        margin-left: auto;
+        width: 46px;
+        height: 24px;
+        padding: 0;
+        border: 1px solid #3a3f45;
+        border-radius: 999px;
+        background: #15181c;
+        cursor: pointer;
+    }
+    .ad-switch::after {
+        content: "";
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #5c636a;
+        transition: left 0.18s ease, background 0.18s ease;
+    }
+    .ad-switch[aria-checked="true"] { border-color: var(--ad-moss); background: rgba(74, 155, 122, 0.16); }
+    .ad-switch[aria-checked="true"]::after { left: 25px; background: var(--ad-moss-bright); }
+    .ad-switch:focus-visible { outline: 2px solid var(--ad-moss-bright); outline-offset: 2px; }
+
+    .ad-status { display: flex; align-items: center; gap: 7px; font-size: 9px; letter-spacing: 1.4px; text-transform: uppercase; color: var(--ad-muted); }
+    .ad-dot { width: 6px; height: 6px; border-radius: 50%; background: #5c636a; flex: none; }
+    .ad-status.ad-on .ad-dot { background: var(--ad-moss-bright); box-shadow: 0 0 8px rgba(111, 208, 168, 0.7); }
+
+    .ad-desc { margin: 0; font-size: 12px; line-height: 1.55; color: #a8a294; }
+    .ad-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .ad-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: 1px solid var(--ad-line-2);
+        background: #0a0c0e;
+        color: var(--ad-bone);
+        font-size: 9px;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+        padding: 4px 7px;
+    }
+    .ad-chip button {
+        padding: 0;
+        border: 0;
+        background: none;
+        color: var(--ad-muted);
+        font-family: inherit;
+        font-size: 12px;
+        line-height: 1;
+        cursor: pointer;
+    }
+    .ad-chip button:hover { color: var(--ad-danger); }
+    .ad-chip button:focus-visible { outline: 1px solid var(--ad-danger); }
+
+    .ad-apply { display: flex; gap: 8px; margin-top: auto; }
+    .ad-apply .ad-select { flex: 1; min-width: 0; }
+    .ad-card-foot { display: flex; justify-content: flex-end; }
+    .ad-card-foot .ad-btn { padding: 6px 10px; font-size: 9px; }
+
+    .ad-hint { margin: 10px 0 16px; font-size: 11px; line-height: 1.6; color: var(--ad-muted); }
+
+    .ad-skills { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+    @media (max-width: 860px) { .ad-skills { grid-template-columns: 1fr; } }
+    .ad-list { display: flex; flex-direction: column; gap: 10px; }
+    .ad-skill {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        border: 1px solid var(--ad-line);
+        background: var(--ad-panel-2);
+        padding: 12px 14px;
+    }
+    .ad-skill-main { flex: 1; min-width: 0; }
+    .ad-skill h4 {
+        margin: 0 0 4px;
+        font-family: Georgia, 'Times New Roman', serif;
+        font-size: 14px;
+        font-weight: normal;
+        letter-spacing: 0.6px;
+        color: var(--ad-cream);
+        overflow-wrap: anywhere;
+    }
+    .ad-skill .ad-btn { padding: 6px 10px; font-size: 9px; }
+    .ad-meta { font-size: 9px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--ad-muted); }
+    .ad-skill .ad-desc { margin-top: 6px; }
+
+    .ad-files { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 16px; align-items: start; }
+    @media (max-width: 860px) { .ad-files { grid-template-columns: 1fr; } }
+    .ad-table-wrap { overflow-x: auto; }
+    .ad-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .ad-table th {
+        padding: 0 10px 8px 0;
+        border-bottom: 1px solid var(--ad-line);
+        text-align: left;
+        font-weight: normal;
+        font-size: 9px;
+        letter-spacing: 1.4px;
+        text-transform: uppercase;
+        color: var(--ad-muted);
+        white-space: nowrap;
+    }
+    .ad-table td {
+        padding: 10px 10px 10px 0;
+        border-bottom: 1px solid #1a1d21;
+        vertical-align: middle;
+        color: var(--ad-bone);
+    }
+    .ad-table th:last-child, .ad-table td:last-child { text-align: right; padding-right: 0; white-space: nowrap; }
+    .ad-file-name { color: var(--ad-cream); overflow-wrap: anywhere; }
+    .ad-table .ad-btn { padding: 5px 9px; font-size: 9px; }
+
+    .ad-empty {
+        border: 1px dashed var(--ad-line-2);
+        padding: 26px;
+        text-align: center;
+        font-size: 12px;
+        line-height: 1.6;
+        color: var(--ad-muted);
+    }
+
+    #ad-toast {
+        position: fixed;
+        left: 50%;
+        bottom: 28px;
+        transform: translateX(-50%) translateY(16px);
+        z-index: 2147483002;
+        padding: 10px 16px;
+        border: 1px solid var(--ad-moss);
+        background: var(--ad-panel);
+        color: var(--ad-cream);
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 12px;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+    #ad-toast.ad-show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 640px) {
+        .ad-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .ad-top { align-items: center; }
+        .ad-shell { padding-bottom: 60px; }
+    }
+</style>
+</head>
+<body>
+
+<div id="agency-den" role="dialog" aria-modal="true" aria-labelledby="ad-title" aria-hidden="true">
+    <div class="ad-shell">
+        <div class="ad-top">
+            <div class="ad-brand">
+                <div class="ad-sigil" aria-hidden="true">&#x2020;</div>
+                <div>
+                    <h2 class="ad-title" id="ad-title">Agency Den</h2>
+                    <p class="ad-sub">Workers &middot; Agents &middot; Skills &middot; Files</p>
+                </div>
+            </div>
+            <button class="ad-btn ad-ghost" type="button" data-action="close">Return to Vault</button>
+        </div>
+
+        <div class="ad-stats" id="ad-stats"></div>
+
+        <div class="ad-tabs" role="tablist" aria-label="Agency Den sections">
+            <button class="ad-tab" type="button" role="tab" data-tab="agents" aria-selected="true">Agents</button>
+            <button class="ad-tab" type="button" role="tab" data-tab="skills" aria-selected="false">Skills</button>
+            <button class="ad-tab" type="button" role="tab" data-tab="files" aria-selected="false">Files</button>
+        </div>
+
+        <div id="ad-view"></div>
+    </div>
+    <div id="ad-toast" role="status" aria-live="polite"></div>
+</div>
+
+<button id="ad-launcher" type="button" aria-haspopup="dialog" aria-controls="agency-den">&#x2020; Agency Den</button>
+
+<script>
+(function () {
+    'use strict';
+
+    var STORE_KEY = 'agencyDen.v1';
+    var MAX_FILE_BYTES = 750 * 1024;
+
+    function uid(prefix) {
+        return prefix + '_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+    }
+
+    function seedState() {
+        var skills = [
+            { id: 'sk_lyric', name: 'Lyric Extraction', category: 'Text', description: 'Pull clean lyrics from a dossier and strip stage directions.' },
+            { id: 'sk_master', name: 'Stem Mastering', category: 'Audio', description: 'Balance levels and export release-ready masters.' },
+            { id: 'sk_sigil', name: 'Moth Sigil Design', category: 'Visual', description: 'Generate cream-on-obsidian moth marks in the vault palette.' },
+            { id: 'sk_copy', name: 'Release Copywriting', category: 'Text', description: 'Write announcement copy in the Endling voice.' },
+            { id: 'sk_index', name: 'File Indexing', category: 'Ops', description: 'Tag, dedupe and catalogue uploaded vault files.' }
+        ];
+        var agents = [
+            { id: 'ag_warden', name: 'Warden', role: 'Orchestrator', model: 'den-core', description: 'Routes every request, keeps the ledger and dispatches work to the right worker.', enabled: true, skills: ['sk_index'] },
+            { id: 'ag_lyricist', name: 'Lyricist', role: 'Text Worker', model: 'text-forge', description: 'Drafts and archives lyrics, keeping the Solastalgia dossier in canon.', enabled: true, skills: ['sk_lyric', 'sk_copy'] },
+            { id: 'ag_soundwright', name: 'Soundwright', role: 'Audio Worker', model: 'audio-forge', description: 'Masters tracks, trims stems and prepares release-ready mixes.', enabled: true, skills: ['sk_master'] },
+            { id: 'ag_mothlight', name: 'Mothlight', role: 'Visual Worker', model: 'vision-forge', description: 'Cover art, moth sigils and vault styling.', enabled: false, skills: ['sk_sigil'] },
+            { id: 'ag_courier', name: 'Courier', role: 'Release Worker', model: 'dispatch', description: 'Packages the vault for distribution and posts announcements.', enabled: true, skills: ['sk_copy'] },
+            { id: 'ag_archivist', name: 'Archivist', role: 'File Worker', model: 'archive', description: 'Catalogues files, checks duplicates and keeps the index clean.', enabled: false, skills: ['sk_index'] }
+        ];
+        return { agents: agents, skills: skills, files: [] };
+    }
+
+    var state = loadState();
+    var activeTab = 'agents';
+    var previousOverflow = '';
+
+    var den = document.getElementById('agency-den');
+    var launcher = document.getElementById('ad-launcher');
+    var view = document.getElementById('ad-view');
+    var statsEl = document.getElementById('ad-stats');
+
+    function loadState() {
+        try {
+            var raw = window.localStorage.getItem(STORE_KEY);
+            if (raw) {
+                var parsed = JSON.parse(raw);
+                if (parsed && Array.isArray(parsed.agents) && Array.isArray(parsed.skills) && Array.isArray(parsed.files)) {
+                    return parsed;
+                }
+            }
+        } catch (err) { /* storage unavailable or corrupt: fall back to the seed */ }
+        var fresh = seedState();
+        try { window.localStorage.setItem(STORE_KEY, JSON.stringify(fresh)); } catch (err2) { /* ignore */ }
+        return fresh;
+    }
+
+    function persist() {
+        try {
+            window.localStorage.setItem(STORE_KEY, JSON.stringify(state));
+            return true;
+        } catch (err) {
+            toast('Browser storage is full — that item is too large to keep.');
+            return false;
+        }
+    }
+
+    function esc(value) {
+        return String(value == null ? '' : value).replace(/[&<>"']/g, function (ch) {
+            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch];
+        });
+    }
+
+    function fmtBytes(bytes) {
+        var n = Number(bytes) || 0;
+        if (n < 1024) { return n + ' B'; }
+        if (n < 1024 * 1024) { return (n / 1024).toFixed(1) + ' KB'; }
+        return (n / (1024 * 1024)).toFixed(2) + ' MB';
+    }
+
+    function fmtDate(iso) {
+        try {
+            return new Date(iso).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+        } catch (err) { return '—'; }
+    }
+
+    function findAgent(id) {
+        return state.agents.filter(function (a) { return a.id === id; })[0];
+    }
+
+    function findSkill(id) {
+        return state.skills.filter(function (s) { return s.id === id; })[0];
+    }
+
+    function storageBytes() {
+        var total = 0;
+        state.files.forEach(function (f) { total += Number(f.size) || 0; });
+        return total;
+    }
+
+    function toast(message) {
+        var el = document.getElementById('ad-toast');
+        if (!el) { return; }
+        el.textContent = message;
+        el.classList.add('ad-show');
+        window.clearTimeout(toast.timer);
+        toast.timer = window.setTimeout(function () { el.classList.remove('ad-show'); }, 2600);
+    }
+
+    function fieldValue(name) {
+        var el = view.querySelector('[data-field="' + name + '"]');
+        return el ? el.value : '';
+    }
+
+    function setField(name, value) {
+        var el = view.querySelector('[data-field="' + name + '"]');
+        if (el) { el.value = value; }
+    }
+
+    function snapshotFields() {
+        var snapshot = {};
+        view.querySelectorAll('[data-field]').forEach(function (el) {
+            if (el.type === 'file') { return; }
+            snapshot[el.getAttribute('data-field')] = el.value;
+        });
+        return snapshot;
+    }
+
+    function restoreFields(snapshot) {
+        view.querySelectorAll('[data-field]').forEach(function (el) {
+            if (el.type === 'file') { return; }
+            var key = el.getAttribute('data-field');
+            if (Object.prototype.hasOwnProperty.call(snapshot, key)) { el.value = snapshot[key]; }
+        });
+    }
+
+    function stat(value, label) {
+        return '<div class="ad-stat"><b>' + esc(value) + '</b><span>' + esc(label) + '</span></div>';
+    }
+
+    function renderStats() {
+        var enabled = state.agents.filter(function (a) { return a.enabled; }).length;
+        statsEl.innerHTML =
+            stat(enabled + ' / ' + state.agents.length, 'Workers enabled') +
+            stat(String(state.skills.length), 'Skills in library') +
+            stat(String(state.files.length), 'Files hosted') +
+            stat(fmtBytes(storageBytes()), 'Den storage');
+    }
+
+    function agentCard(agent) {
+        var chips = agent.skills.map(function (skillId) {
+            var skill = findSkill(skillId);
+            if (!skill) { return ''; }
+            return '<span class="ad-chip">' + esc(skill.name) +
+                '<button type="button" data-action="unapply" data-agent="' + agent.id + '" data-skill="' + skill.id + '" aria-label="Remove ' + esc(skill.name) + ' from ' + esc(agent.name) + '">&times;</button>' +
+                '</span>';
+        }).join('');
+
+        var options = state.skills.filter(function (skill) {
+            return agent.skills.indexOf(skill.id) === -1;
+        }).map(function (skill) {
+            return '<option value="' + skill.id + '">' + esc(skill.name) + '</option>';
+        }).join('');
+
+        return '<article class="ad-card' + (agent.enabled ? '' : ' ad-off') + '">' +
+            '<div class="ad-card-head">' +
+                '<div class="ad-avatar" aria-hidden="true">' + esc(agent.name.charAt(0)) + '</div>' +
+                '<div class="ad-name-wrap">' +
+                    '<h3 class="ad-name">' + esc(agent.name) + '</h3>' +
+                    '<div class="ad-role">' + esc(agent.role) + '</div>' +
+                '</div>' +
+                '<button class="ad-switch" type="button" role="switch" aria-checked="' + (agent.enabled ? 'true' : 'false') + '" aria-label="' + (agent.enabled ? 'Disable ' : 'Enable ') + esc(agent.name) + '" data-action="toggle" data-agent="' + agent.id + '"></button>' +
+            '</div>' +
+            '<div class="ad-status' + (agent.enabled ? ' ad-on' : '') + '"><span class="ad-dot"></span>' + (agent.enabled ? 'Enabled' : 'Disabled') + ' &middot; ' + esc(agent.model) + '</div>' +
+            '<p class="ad-desc">' + esc(agent.description) + '</p>' +
+            '<div class="ad-chips">' + (chips || '<span class="ad-meta">No skills applied</span>') + '</div>' +
+            '<div class="ad-apply">' +
+                '<select class="ad-select" data-skill-select="' + agent.id + '" aria-label="Skill to apply to ' + esc(agent.name) + '"' + (options ? '' : ' disabled') + '>' +
+                    (options || '<option value="">No skills left to apply</option>') +
+                '</select>' +
+                '<button class="ad-btn" type="button" data-action="apply" data-agent="' + agent.id + '"' + (options ? '' : ' disabled') + '>Apply</button>' +
+            '</div>' +
+            '<div class="ad-card-foot"><button class="ad-btn ad-danger" type="button" data-action="remove-agent" data-agent="' + agent.id + '">Remove worker</button></div>' +
+        '</article>';
+    }
+
+    function renderAgents() {
+        var enabled = state.agents.filter(function (a) { return a.enabled; }).length;
+        var cards = state.agents.map(agentCard).join('');
+        return '<section class="ad-panel ad-register">' +
+                '<h3>Register a worker</h3>' +
+                '<div class="ad-two">' +
+                    '<div class="ad-field"><label for="ad-agent-name">Name</label><input class="ad-input" id="ad-agent-name" type="text" data-field="agentName" placeholder="e.g. Nightjar" autocomplete="off"></div>' +
+                    '<div class="ad-field"><label for="ad-agent-role">Role</label><input class="ad-input" id="ad-agent-role" type="text" data-field="agentRole" placeholder="e.g. Audio Worker" autocomplete="off"></div>' +
+                '</div>' +
+                '<div class="ad-field"><label for="ad-agent-desc">What it does</label><input class="ad-input" id="ad-agent-desc" type="text" data-field="agentDesc" placeholder="Short description" autocomplete="off"></div>' +
+                '<button class="ad-btn" type="button" data-action="add-agent">Add worker</button>' +
+            '</section>' +
+            '<p class="ad-hint">' + enabled + ' of ' + state.agents.length + ' workers are active. Flip a switch to enable or disable a worker, then apply a skill from the library beneath its card.</p>' +
+            '<div class="ad-grid">' + (cards || '<div class="ad-empty">No workers yet. Register the first one above.</div>') + '</div>';
+    }
+
+    function renderSkills() {
+        var list = state.skills.map(function (skill) {
+            var users = state.agents.filter(function (agent) { return agent.skills.indexOf(skill.id) !== -1; });
+            var userNames = users.map(function (user) { return esc(user.name); }).join(', ');
+            return '<div class="ad-skill">' +
+                '<div class="ad-skill-main">' +
+                    '<h4>' + esc(skill.name) + '</h4>' +
+                    '<div class="ad-meta">' + esc(skill.category) + ' &middot; ' + users.length + (users.length === 1 ? ' worker' : ' workers') + '</div>' +
+                    (skill.description ? '<p class="ad-desc">' + esc(skill.description) + '</p>' : '') +
+                    (userNames ? '<div class="ad-meta" style="margin-top:6px">Applied to ' + userNames + '</div>' : '') +
+                '</div>' +
+                '<button class="ad-btn ad-danger" type="button" data-action="remove-skill" data-skill="' + skill.id + '">Delete</button>' +
+            '</div>';
+        }).join('');
+
+        var categories = ['Text', 'Audio', 'Visual', 'Ops', 'Research'];
+        var categoryOptions = categories.map(function (category) {
+            return '<option value="' + category + '">' + category + '</option>';
+        }).join('');
+        var agentOptions = state.agents.map(function (agent) {
+            return '<option value="' + agent.id + '">' + esc(agent.name) + '</option>';
+        }).join('');
+
+        return '<div class="ad-skills">' +
+            '<section class="ad-panel">' +
+                '<h3>Skill library</h3>' +
+                (list ? '<div class="ad-list">' + list + '</div>' : '<div class="ad-empty">No skills yet. Forge the first one.</div>') +
+            '</section>' +
+            '<section class="ad-panel">' +
+                '<h3>Create a skill</h3>' +
+                '<div class="ad-field"><label for="ad-skill-name">Skill name</label><input class="ad-input" id="ad-skill-name" type="text" data-field="skillName" placeholder="e.g. Cover Art Direction" autocomplete="off"></div>' +
+                '<div class="ad-two">' +
+                    '<div class="ad-field"><label for="ad-skill-category">Category</label><select class="ad-select" id="ad-skill-category" data-field="skillCategory">' + categoryOptions + '</select></div>' +
+                    '<div class="ad-field"><label for="ad-skill-apply">Apply to</label><select class="ad-select" id="ad-skill-apply" data-field="skillApply"><option value="">No worker yet</option>' + agentOptions + '</select></div>' +
+                '</div>' +
+                '<div class="ad-field"><label for="ad-skill-desc">Description</label><textarea class="ad-textarea" id="ad-skill-desc" data-field="skillDesc" rows="3" placeholder="What this skill lets a worker do"></textarea></div>' +
+                '<button class="ad-btn" type="button" data-action="add-skill">Forge skill</button>' +
+                '<p class="ad-hint">New skills land in the library and can be applied to any worker from its card.</p>' +
+            '</section>' +
+        '</div>';
+    }
+
+    function renderFiles() {
+        var rows = state.files.map(function (file) {
+            return '<tr>' +
+                '<td class="ad-file-name">' + esc(file.name) + '</td>' +
+                '<td>' + esc(file.type || 'file') + '</td>' +
+                '<td>' + fmtBytes(file.size) + '</td>' +
+                '<td>' + esc(fmtDate(file.added)) + '</td>' +
+                '<td>' +
+                    (file.data
+                        ? '<a class="ad-btn" href="' + esc(file.data) + '" download="' + esc(file.name) + '">Open</a> '
+                        : '<span class="ad-meta">name only</span> ') +
+                    '<button class="ad-btn ad-danger" type="button" data-action="remove-file" data-file="' + file.id + '">Delete</button>' +
+                '</td>' +
+            '</tr>';
+        }).join('');
+
+        return '<div class="ad-files">' +
+            '<section class="ad-panel">' +
+                '<h3>Vault files</h3>' +
+                (state.files.length
+                    ? '<div class="ad-table-wrap"><table class="ad-table"><thead><tr><th>Name</th><th>Type</th><th>Size</th><th>Added</th><th>Actions</th></tr></thead><tbody>' + rows + '</tbody></table></div>'
+                    : '<div class="ad-empty">No files hosted yet. Host a text file below or upload one from this machine.</div>') +
+                '<p class="ad-hint">' + fmtBytes(storageBytes()) + ' held in this browser. Files stay on this device — nothing is uploaded to a server.</p>' +
+            '</section>' +
+            '<section class="ad-panel">' +
+                '<h3>Add a file</h3>' +
+                '<div class="ad-field"><label for="ad-file-name">File name</label><input class="ad-input" id="ad-file-name" type="text" data-field="fileName" placeholder="e.g. solastalgia-notes.md" autocomplete="off"></div>' +
+                '<div class="ad-field"><label for="ad-file-body">Contents</label><textarea class="ad-textarea" id="ad-file-body" data-field="fileBody" rows="5" placeholder="Paste text to host it in the den"></textarea></div>' +
+                '<button class="ad-btn" type="button" data-action="add-text-file">Host text file</button>' +
+                '<hr class="ad-rule">' +
+                '<div class="ad-field"><label for="ad-file-upload">Or upload from this machine</label><input class="ad-input" id="ad-file-upload" type="file" data-field="fileUpload"></div>' +
+                '<p class="ad-hint">Uploads up to 750 KB are kept in this browser; larger files are catalogued by name only.</p>' +
+            '</section>' +
+        '</div>';
+    }
+
+    function render() {
+        var snapshot = snapshotFields();
+        renderStats();
+        if (activeTab === 'skills') {
+            view.innerHTML = renderSkills();
+        } else if (activeTab === 'files') {
+            view.innerHTML = renderFiles();
+        } else {
+            view.innerHTML = renderAgents();
+        }
+        restoreFields(snapshot);
+        den.querySelectorAll('[data-tab]').forEach(function (tab) {
+            tab.setAttribute('aria-selected', tab.getAttribute('data-tab') === activeTab ? 'true' : 'false');
+        });
+    }
+
+    function toggleAgent(id) {
+        var agent = findAgent(id);
+        if (!agent) { return; }
+        agent.enabled = !agent.enabled;
+        persist();
+        render();
+        toast(agent.name + (agent.enabled ? ' enabled.' : ' disabled.'));
+    }
+
+    function applySkill(agentId) {
+        var agent = findAgent(agentId);
+        if (!agent) { return; }
+        var select = view.querySelector('[data-skill-select="' + agentId + '"]');
+        var skillId = select ? select.value : '';
+        if (!skillId) { toast('Choose a skill to apply first.'); return; }
+        if (agent.skills.indexOf(skillId) !== -1) { return; }
+        agent.skills.push(skillId);
+        persist();
+        render();
+        var skill = findSkill(skillId);
+        toast((skill ? skill.name : 'Skill') + ' applied to ' + agent.name + '.');
+    }
+
+    function unapplySkill(agentId, skillId) {
+        var agent = findAgent(agentId);
+        if (!agent) { return; }
+        agent.skills = agent.skills.filter(function (id) { return id !== skillId; });
+        persist();
+        render();
+        toast('Skill removed from ' + agent.name + '.');
+    }
+
+    function removeAgent(id) {
+        var agent = findAgent(id);
+        if (!agent) { return; }
+        state.agents = state.agents.filter(function (a) { return a.id !== id; });
+        persist();
+        render();
+        toast('Worker removed: ' + agent.name + '.');
+    }
+
+    function addAgent() {
+        var name = fieldValue('agentName').trim();
+        if (!name) { toast('Name the worker first.'); return; }
+        var role = fieldValue('agentRole').trim() || 'Worker';
+        var description = fieldValue('agentDesc').trim() || 'No description yet.';
+        state.agents.push({
+            id: uid('ag'),
+            name: name,
+            role: role,
+            model: 'den-core',
+            description: description,
+            enabled: true,
+            skills: []
+        });
+        setField('agentName', '');
+        setField('agentRole', '');
+        setField('agentDesc', '');
+        persist();
+        render();
+        toast('Worker registered: ' + name + '.');
+    }
+
+    function addSkill() {
+        var name = fieldValue('skillName').trim();
+        if (!name) { toast('Name the skill first.'); return; }
+        var category = fieldValue('skillCategory') || 'Text';
+        var description = fieldValue('skillDesc').trim();
+        var applyTo = fieldValue('skillApply');
+        var skill = { id: uid('sk'), name: name, category: category, description: description };
+        state.skills.push(skill);
+        if (applyTo) {
+            var agent = findAgent(applyTo);
+            if (agent && agent.skills.indexOf(skill.id) === -1) { agent.skills.push(skill.id); }
+        }
+        setField('skillName', '');
+        setField('skillDesc', '');
+        setField('skillApply', '');
+        persist();
+        render();
+        toast('Skill forged: ' + name + '.');
+    }
+
+    function removeSkill(id) {
+        var skill = findSkill(id);
+        if (!skill) { return; }
+        state.skills = state.skills.filter(function (s) { return s.id !== id; });
+        state.agents.forEach(function (agent) {
+            agent.skills = agent.skills.filter(function (skillId) { return skillId !== id; });
+        });
+        persist();
+        render();
+        toast('Skill deleted: ' + skill.name + '.');
+    }
+
+    function addTextFile() {
+        var name = fieldValue('fileName').trim();
+        var body = fieldValue('fileBody');
+        if (!name) { toast('Name the file first.'); return; }
+        if (!body) { toast('Paste some contents first.'); return; }
+        var record = {
+            id: uid('f'),
+            name: name,
+            type: 'text/plain',
+            size: new Blob([body]).size,
+            added: new Date().toISOString(),
+            data: 'data:text/plain;charset=utf-8,' + encodeURIComponent(body)
+        };
+        state.files.unshift(record);
+        if (!persist()) { state.files.shift(); render(); return; }
+        setField('fileName', '');
+        setField('fileBody', '');
+        render();
+        toast('File hosted: ' + name + '.');
+    }
+
+    function handleUpload(input) {
+        var file = input.files && input.files[0];
+        if (!file) { return; }
+        var record = {
+            id: uid('f'),
+            name: file.name,
+            type: file.type || 'application/octet-stream',
+            size: file.size,
+            added: new Date().toISOString(),
+            data: ''
+        };
+        if (file.size > MAX_FILE_BYTES) {
+            state.files.unshift(record);
+            if (!persist()) { state.files.shift(); render(); return; }
+            input.value = '';
+            render();
+            toast('Catalogued by name only — too large to store in the browser.');
+            return;
+        }
+        var reader = new FileReader();
+        reader.onload = function () {
+            record.data = String(reader.result || '');
+            state.files.unshift(record);
+            if (!persist()) { state.files.shift(); render(); return; }
+            render();
+            toast('File hosted: ' + file.name + '.');
+        };
+        reader.onerror = function () { toast('Could not read that file.'); };
+        reader.readAsDataURL(file);
+    }
+
+    function removeFile(id) {
+        var file = state.files.filter(function (f) { return f.id === id; })[0];
+        if (!file) { return; }
+        state.files = state.files.filter(function (f) { return f.id !== id; });
+        persist();
+        render();
+        toast('File removed: ' + file.name + '.');
+    }
+
+    function openDen() {
+        previousOverflow = document.body.style.overflow;
+        den.classList.add('ad-open');
+        den.removeAttribute('aria-hidden');
+        document.body.style.overflow = 'hidden';
+        var closeButton = den.querySelector('[data-action="close"]');
+        if (closeButton) { closeButton.focus(); }
+    }
+
+    function closeDen() {
+        den.classList.remove('ad-open');
+        den.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = previousOverflow;
+        launcher.focus();
+    }
+
+    den.addEventListener('click', function (event) {
+        var target = event.target;
+        if (!target || !target.closest) { return; }
+
+        var tab = target.closest('[data-tab]');
+        if (tab && den.contains(tab)) {
+            activeTab = tab.getAttribute('data-tab');
+            render();
+            return;
+        }
+
+        var trigger = target.closest('[data-action]');
+        if (!trigger || !den.contains(trigger)) { return; }
+
+        var action = trigger.getAttribute('data-action');
+        var agentId = trigger.getAttribute('data-agent');
+        var skillId = trigger.getAttribute('data-skill');
+        var fileId = trigger.getAttribute('data-file');
+
+        if (action === 'close') { closeDen(); return; }
+        if (action === 'toggle') { toggleAgent(agentId); return; }
+        if (action === 'apply') { applySkill(agentId); return; }
+        if (action === 'unapply') { unapplySkill(agentId, skillId); return; }
+        if (action === 'remove-agent') { removeAgent(agentId); return; }
+        if (action === 'add-agent') { addAgent(); return; }
+        if (action === 'add-skill') { addSkill(); return; }
+        if (action === 'remove-skill') { removeSkill(skillId); return; }
+        if (action === 'add-text-file') { addTextFile(); return; }
+        if (action === 'remove-file') { removeFile(fileId); return; }
+    });
+
+    view.addEventListener('change', function (event) {
+        var target = event.target;
+        if (target && target.getAttribute && target.getAttribute('data-field') === 'fileUpload') {
+            handleUpload(target);
+        }
+    });
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape' && den.classList.contains('ad-open')) { closeDen(); }
+    });
+
+    launcher.addEventListener('click', openDen);
+
+    render();
+    openDen();
+})();
+</script>
+
+</body>
+</html>
